@@ -1,0 +1,102 @@
+---
+title: "ANLY503_HW7"
+output: html_document
+---
+
+##Task One
+
+```{r}
+rm(list=ls())
+library("readxl")
+library(dplyr)
+library(tidyverse)
+d<- read_xls("data/State_to_State_Migrations_Table_2018.xls")
+```
+
+##Task Two
+
+```{r}
+temp<-d
+temp<-temp[-c(1:5, 78:86), -(2:9)]# remove footnotes and extra columns
+
+colnames(temp)<-c() # remove column names from the orignal table
+unlist(c(temp[,1])) # check row names
+state_names<- unlist(c(temp[,1]))[which(!is.na(unlist(c(temp[,1]))))]
+#length(state_names) # should be 52
+# state_names[c(1, 29)] are not state names
+state_names <- state_names[-c(1, 29)]
+print(state_names)
+length(state_names) 
+
+r_names<-unlist(c(temp[,1]))
+c_names<-unlist(c(temp[1,]))
+```
+
+```{r}
+# construct a matrix, where each element represents 'count',
+# from the i^th state to j^th state
+# note that the diag elements in this matrix are NA
+d_matrix<- matrix(0, nrow =52, ncol= 52)
+for(i in 1:52){
+  from = state_names[i]
+  for(j in 1:52){
+  to= state_names[j]
+  esti=as.numeric(temp[which(r_names == from) , which(c_names==to)])
+  d_matrix[i,j] = esti
+  }
+}
+```
+
+```{r}
+# convert the matrix of count to long format
+data_final<- matrix(0, ncol= 3, nrow = 52*51)
+kk=1
+for(i in 1:52){
+  for(j in 1:52){
+    temp_count <- d_matrix[i,j]
+    if(!is.na(temp_count)){
+      data_final[kk, ]<-c(state_names[i], state_names[j], temp_count)
+      kk=kk+1
+      }
+
+  }
+}
+colnames(data_final)<-c('source', 'final', 'count')
+head(data_final)
+```
+
+## Task Three and Task Four
+
+```{r}
+data_final = data.frame(data_final)
+data_final$count = as.numeric(data_final$count)
+data_final$source[data_final$source == 'District of Columbia'] <- 'DC'
+```
+
+```{r,fig.width=7, fig.height=5}
+library(circlize)
+source_state=c('New York', 'Texas', 'Maryland', 'Virginia')
+network = data_final %>% filter(source %in% source_state) %>% group_by(source) %>% top_n(10, wt=count)
+
+state_col = c('New York' = "#377EB8",'Texas'='#E41A1C','Maryland'='#E41A1C','Virginia'='#377EB8')
+state_col2 = c(state_col, state_col)
+
+col_mat = rand_color(length(network), transparency = 0.5)
+
+chordDiagram(network,grid.col = state_col2,annotationTrack = c('grid'), 
+    preAllocateTracks = list(list(track.height = 0.1)))
+
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(-0.4, 0.8),cex=0.8,col='brown')
+  circos.axis(h = "top", labels.cex = 0.5, major.tick.length = 0.2, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+
+title(main="Top 10 Migration Destinations of NY, TX, MD and VA", cex=1)
+```
+
+<p style="color:red">Red: Export Migrations</p>
+
+<p style="color:blue">Blue: Import Migrations</p>

@@ -1,0 +1,247 @@
+---
+title: "ANLY503_Q1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+# load the required packages
+library(dplyr)
+library(ggplot2)
+library(visdat)
+library(hrbrthemes)
+library(naniar)
+library(Hmisc)
+library(skimr)
+```
+
+
+# Question One:
+
+
+## <span style="color:red">R Version:</span>
+
+we need to load the file firstly
+
+```{r}
+# load the dataset
+transactions = read.csv('./data/transactions.csv')
+accounts = read.csv('./data/accounts_analytical.csv')
+```
+
+and then take a glance for these datasets
+
+```{r}
+# to find descriptive information for transactions
+Hmisc::describe(transactions)
+```
+
+```{r}
+glimpse(accounts)
+```
+
+ because there are too much variables with long name
+
+ I make a subset dataset for columns that have null values
+
+```{r}
+# do analysis for null values
+accounts_with_null_columns = accounts %>% select_if(funs(sum(as.numeric(is.na(.)), na.rm=TRUE) != 0))
+
+theme_set(theme_ipsum())
+vis_dat(accounts_with_null_columns,warn_large_data=FALSE)
+```
+
+ we can find there are lots of NULL values in columns related with loan
+
+```{r}
+gg_miss_var(transactions)
+```
+
+there are only one column have null values that is 'account'
+
+## Question 1A: Whether an account has a credit card or not
+
+```{r}
+
+# filter the dataset to find the accounts with or without credit cards
+accounts$credit_cards[is.na(accounts$credit_cards)] <- 0
+
+p <- accounts %>%
+  ggplot( aes(x=credit_cards)) +
+    geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
+    ggtitle("The count plot of credit cards") +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=15)
+    )
+
+p
+```
+
+there are 3775 accounts do not have a credit card
+
+## Question 1B: Whether an account has a loan or not
+
+```{r}
+# find whether account has loan or not 
+accounts$loan_status[accounts$loan_status == ''] <- 'Unknown'
+
+ggplot(accounts,aes(loan_status,fill=loan_status)) +
+  geom_bar() +
+  labs(x=NULL,y='Count') +
+  geom_text(stat='count',aes(label = after_stat(count),vjust=-1,size=3.5)) +
+  ggtitle('The count plot of loan status')
+```
+
+we can there are lots of unknow values, and there are 448 loan is active, and 234 loan is expired
+
+## Question 1C: The average balance for the account
+
+```{r}
+
+# calculate the average balance
+accounts$mean_balance = (accounts$max_balance + accounts$min_balance) / 2
+
+# to show the distribution of average balance for accounts
+average_balance <- ggplot(accounts,aes(x=mean_balance)) +
+  geom_histogram(aes(y=..density..),
+                 binwidth = 10000,
+                  colour = 'black', fill = 'white') +
+  geom_density(alpha=0.2,fill='blue') +
+  ggtitle('The distribution of average balance')
+
+average_balance
+```
+
+## Question 1D:
+
+```{R}
+average_balance + facet_wrap(~credit_cards+loan_status,nrow=4,
+                             labeller = labeller(
+                               credit_cards = c('0' = "0 Credit Card",
+                                                '1' = "1 Credit Card",
+                                                '2' = "2 Credit Cards")
+                             )) +
+  ggtitle('The distribution of average balance under different number of credit cards')
+```
+
+there are no obvious change of distribution of average balance by the number of credit cards
+
+```{r}
+# to make a heatmap to find the count under different credit_cards and loan_status
+counts = count(accounts,loan_status,credit_cards) 
+
+ggplot(counts,aes(x=loan_status,y=credit_cards)) +
+  geom_tile(aes(fill=n)) +
+  geom_text(aes(label=n),stat='identity') + 
+  scale_fill_continuous(low="grey", high="pink", limits=c(0,4000))+
+  ggtitle('number of accounts type')
+```
+
+after plotting this matrix, we can find most accounts do not have credit_cards and have Unknow loan status
+
+## <span style="color:red">Python Version:</span>
+
+```{r}
+library(reticulate)
+```
+
+### import the required packages
+
+```{python}
+# loan packages
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+### load the datasets
+
+```{python}
+transactions = pd.read_csv('./data/transactions.csv')
+accounts = pd.read_csv('./data/accounts_analytical.csv')
+```
+
+### Information for transactions
+
+```{python}
+# take some descriptive information
+transactions.describe()
+
+transactions.info()
+```
+
+### Infotmation for accounts
+
+```{python}
+accounts.describe()
+
+accounts.info()
+```
+
+## Question 1A:
+### Whether an account has a credit card or not
+
+```{python}
+# filter the dataset 
+
+accounts['credit_cards'] = accounts['credit_cards'].fillna('Unknow')
+
+sns.set_theme(style='darkgrid')
+
+ax = sns.countplot(x="credit_cards", data=accounts)
+
+ax.set_xticklabels(['One Credit Card','Two Credit Cards','Unknown'])
+ax.set_title('The countplot of credit_cards')
+ax.set_xlabel('Number of credit cards')
+```
+
+### most accounts do not have credit card information, and second highest is one credit card account
+
+## Question 1B:
+### Whether an account has a loan or not
+
+```{python}
+accounts.loan_status = accounts.loan_status.fillna('Unknown')
+
+sns.set_theme(style='darkgrid')
+
+ax = sns.countplot(x="loan_status", data=accounts)
+
+ax.set_title('The countplot of loan_status')
+```
+
+same as the last plot, most accounts do not have loan status information, and second highest is current loan.
+
+## Question 1C:
+### The average balance for the account
+
+```{python}
+accounts['mean_balance'] = (accounts['max_balance'] + accounts['min_balance']) / 2
+
+f, axes = plt.subplots(1, 2)
+
+sns.boxplot(x='mean_balance',data=accounts,ax=axes[0])
+axes[0].title.set_text('The Boxplot of Mean Balance')
+sns.distplot(x=accounts.mean_balance,ax=axes[1])
+axes[1].title.set_text('The KDE plot of Mean Balance')
+axes[1].set_xticklabels(labels='mean balance')
+plt.tight_layout()
+plt.show()
+```
+
+### we can find most mean_balance is around $25000.
+
+## Question 1D:
+
+### to combine these three questions together
+
+```{python}
+
+# to make the boxplot and facetgrid under different number of credit_cards and loan_status
+ax = sns.boxplot(x="loan_status", y="mean_balance", hue="credit_cards",
+                 data=accounts, palette="Set3")
+ax.legend(loc='center right', bbox_to_anchor=(1.25, 0.5), ncol=1)
+ax.set_title('The Boxplot of mean balance in loan_status and number of credit cards')
+```

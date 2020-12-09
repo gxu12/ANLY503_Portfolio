@@ -1,0 +1,260 @@
+---
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(stringr)
+
+county = read_csv('./data/countypres_2000-2016.csv')
+unemployment = read_excel('./data/Unemployment.xls')
+unemployment = unemployment %>% slice(7:n())
+```
+
+```{r}
+colnames(unemployment) = unemployment[1,]
+unemployment = unemployment[-1,]
+```
+
+#Task One: Done in Python#
+
+**(i) proportion of the vote won by either Democartic or Republican candidate**
+
+### Import the required packages and dataset###
+
+```{python}
+import pandas as pd
+county = pd.read_csv('./data/countypres_2000-2016.csv')
+unemployment = pd.read_excel('./data/Unemployment.xls')
+```
+
+##**to get the elections percent firstly**##
+
+### select the rows in unemployment dataset###
+
+```{python}
+unemployment = unemployment[6:]
+unemployment.columns = unemployment.iloc[0]
+unemployment = unemployment.drop(unemployment.index[0])
+unemployment.reset_index(inplace=True)
+```
+
+### use groupby to get the vote percent in each year for each party###
+
+```{python}
+
+vote_percent_df = county.groupby(['state_po','county','party','year']).apply(lambda g: g.candidatevotes/g.totalvotes)
+vote_percent_df = vote_percent_df.reset_index().drop('level_4',axis=1)
+vote_percent_df.rename(columns={ vote_percent_df.columns[-1]: "vote_percent" }, inplace = True)
+```
+
+### filter the vote percent with year >= 2018 and party type = democrat###
+```{python}
+vote_percent_df = vote_percent_df.loc[(vote_percent_df['year'] >= 2008) & (vote_percent_df['party'] == 'democrat')]
+vote_percent_df.reset_index(drop=True,inplace=True)
+```
+
+##**Then to get the unemployment rates**##
+### There are several rows needed to be moved like area_name = 'United States' etc###
+
+```{python}
+unemployment = unemployment[unemployment['Rural_urban_continuum_code_2013'].notna()]
+selected_column = ['area_name','Unemployment_rate_2008','Unemployment_rate_2012','Unemployment_rate_2016']
+selected_unemployment = unemployment[selected_column].reset_index(drop=True)
+```
+
+### split area_name into state and county###
+
+```{python}
+selected_unemployment[['State','County']] = selected_unemployment['area_name'].str.split(',',expand=True)
+selected_unemployment.drop('area_name',inplace=True,axis=1)
+selected_unemployment
+```
+
+### rename column to be precisely###
+
+```{python}
+selected_unemployment.columns = ['2008','2012','2016','State','County']
+selected_unemployment
+```
+
+#Task Two: Done in R:
+
+##**(i) Proportion of vote won**
+
+```{r}
+selected_county = county %>% group_by(year,state_po,party,county) %>% mutate(percent = candidatevotes/totalvotes) %>% select(year,state_po,FIPS,county,party,percent)
+selected_county = na.omit(selected_county[selected_county$party == 'democrat',])
+selected_county$FIPS = str_pad(selected_county$FIPS,max(nchar(selected_county$FIPS)),side="left", pad="0")
+selected_county = selected_county %>% filter(year >= 2008)
+```
+
+```{r}
+selected_column = c('FIPStxt','area_name','Unemployment_rate_2008','Unemployment_rate_2012','Unemployment_rate_2016')
+selected_unemployment = unemployment[selected_column]
+selected_unemployment = na.omit(selected_unemployment %>% separate(area_name,c('County','State'),','))
+```
+
+```{r}
+library(sf)
+library(tmap)
+library(tmaptools)
+```
+
+```{r}
+usgeo <- read_sf('./data/tl_2019_us_county-1/tl_2019_us_county.shp')
+
+```
+
+### to draw the Texas firstly (Texas FIPS = 48)###
+### draw the shape firstly###
+
+```{r}
+texas_geo <- filter(usgeo,STATEFP=='48')
+qtm(texas_geo)
+
+```
+### Then we can draw the percent of vote in texas###
+
+```{r}
+texas_geo$NAME <- as.character(texas_geo$NAME)
+texas_map <- left_join(texas_geo, selected_county,by=c("GEOID"="FIPS"))
+tx_plot = tm_shape(texas_map) +
+tm_fill("percent", title="percent of votes for democrat in Texas", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_style('classic') +
+  tm_facets(by=c('year'),ncol=1) +
+  tm_layout(main.title = 'Percent of votes for democrat in Texas',main.title.size=1,legend.outside = TRUE)
+tx_plot
+```
+
+
+### to draw the Calidornia secondly (California FIPS = 06)###
+### also draw the shape firstly###
+
+```{r}
+ca_geo <- filter(usgeo,STATEFP=='06')
+qtm(ca_geo)
+```
+
+### Then draw the percent of vote in CA###
+
+```{r}
+ca_geo$NAME <- as.character(ca_geo$NAME)
+ca_map <- left_join(ca_geo, selected_county,by=c("GEOID"="FIPS"))
+ca_plot = tm_shape(ca_map) +
+tm_fill("percent", title="percent of votes for democrat in Calidornia", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_facets(by=c('year'),ncol=1) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of votes for democrat in California',main.title.size=1,legend.outside = TRUE)
+ca_plot
+```
+
+### draw Pennsylvania lastly(FIPS = 42)###
+### to draw the shape of Penn###
+
+```{r}
+penn_geo <- filter(usgeo,STATEFP=='42')
+qtm(penn_geo)
+```
+
+### Then draw the percent of vote in Penn###
+
+```{r}
+penn_geo$NAME <- as.character(penn_geo$NAME)
+penn_map <- left_join(penn_geo, selected_county,by=c("GEOID"="FIPS"))
+penn_plot = tm_shape(penn_map) +
+tm_fill("percent", title="percent of votes for democrat in Pennsylvania", palette = "PRGn") +
+  tm_facets(by=c('year'),ncol=1) +
+tm_borders(alpha=.5) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of votes for democrat in Pennsylvania',main.title.size=1,legend.outside = TRUE)
+penn_plot
+```
+
+##**Task 2: draw for Unemployment Rate**##
+
+### firstly, to let unemployment rate dataset to be tidy dataset###
+
+```{r}
+library(tidyr)
+
+selected_unemployment = pivot_longer(selected_unemployment, cols=4:6, names_to = "year", values_to = "Unemployment Rate")
+
+selected_unemployment$year = substr(selected_unemployment$year,19,23)
+
+selected_unemployment$year = as.numeric(selected_unemployment$year)
+```
+
+### unemployment rate in Texas###
+
+```{r}
+texas_map <- left_join(texas_geo, selected_unemployment,by=c("GEOID"="FIPStxt"))
+texas_map$`Unemployment Rate` <- as.numeric(texas_map$`Unemployment Rate`)
+tx_un_plot = tm_shape(texas_map) +
+tm_fill('Unemployment Rate', title="Unemployment Rate in Texas(%)", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_style('classic') +
+  tm_facets(by=c('year'),ncol=1) +
+  tm_layout(main.title = 'Unemployment rate in Texas',main.title.size=1,legend.outside = TRUE)
+tx_un_plot
+```
+
+### Unemployment rate in CA###
+
+```{r}
+ca_map <- left_join(ca_geo, selected_unemployment,by=c("GEOID"="FIPStxt"))
+ca_map$`Unemployment Rate` <- as.numeric(ca_map$`Unemployment Rate`)
+ca_un_plot = tm_shape(ca_map) +
+tm_fill('Unemployment Rate', title="Unemployment Rate in California(%)", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_style('classic') +
+  tm_facets(by=c('year'),ncol=1) +
+  tm_layout(main.title = 'Unemployment rate in California',main.title.size=1,legend.outside = TRUE)
+ca_un_plot
+```
+
+### Unemployment in Penn###
+
+```{r}
+penn_geo$NAME <- as.character(penn_geo$NAME)
+penn_map <- left_join(penn_geo, selected_unemployment,by=c("GEOID"="FIPStxt"))
+penn_map$`Unemployment Rate` <- as.numeric(penn_map$`Unemployment Rate`)
+penn_un_plot = tm_shape(penn_map) +
+tm_fill("Unemployment Rate", title="Unemployment Rate in Pennsylvania(%)", palette = "PRGn") +
+  tm_facets(by=c('year'),ncol=1) +
+tm_borders(alpha=.5) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Unemployment Rate in Pennsylvania',main.title.size=1,legend.outside = TRUE)
+penn_un_plot
+```
+
+## Finally, combine plots###
+
+### For Pennsylvania###
+
+```{r}
+current.mode <- tmap_mode('plot')
+tmap_arrange(penn_plot,penn_un_plot,widths = c(1,1))
+tmap_mode(current.mode)
+```
+
+### For Texas###
+
+```{r}
+current.mode <- tmap_mode('plot')
+tmap_arrange(tx_plot,tx_un_plot,widths = c(1,1))
+tmap_mode(current.mode)
+```
+
+### For California###
+
+```{r}
+current.mode <- tmap_mode('plot')
+tmap_arrange(ca_plot,ca_un_plot,widths = c(1,1))
+tmap_mode(current.mode)
+```

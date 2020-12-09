@@ -1,0 +1,18 @@
+---
+title: "Assignment1"
+output: html_document
+---
+
+### Assignment One:
+
+*Question:*
+
+Open and explore your dataset and draw 3 conceptual data visualizations to describe different aspects of the data set, stating in each case the question you want to address with the visualization
+
+![Assignment One](IMG_0900.JPG)
+
+
+
+
+
+

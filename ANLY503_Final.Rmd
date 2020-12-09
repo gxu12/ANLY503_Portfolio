@@ -1,0 +1,670 @@
+---
+title: "ANLY503-Final"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(visdat)
+library(hrbrthemes)
+library(naniar)
+library(Hmisc)
+library(skimr)
+library(flexdashboard)
+library(sf)
+library(tmap)
+library(tmaptools)
+library(DT)
+library(zoo)
+library(noncensus)
+library(ggwordcloud)
+library(devtools)
+library(arcdiagram)
+library(igraph)
+library(qgraph)
+```
+
+```{r}
+foreign_worker = read_xlsx('data/USAforeignworker.xlsx')
+```
+
+```{r}
+foreign_worker[foreign_worker == 'NA'] <- NA 
+```
+
+Introduction
+=====================================
+
+
+### Introduction
+
+In this project, 
+
+I analyzed the dataset on Kaggle, and this dataset is about the job applicants' information in different states, and the process is I studied the number of applications for each occupation, the number of acceptances, the distribution of income in different industries, the change of applicant information over time, and so on. 
+
+The first step of the analysis is data cleaning to make the dataset clean and tidy, followed by univariate visualization, followed by multivariate visual analysis, followed by analysis based on time variation, followed by geographic location analysis, and finally for text data analysis.
+
+### Tools
+
+Programming Language: R
+
+Dashboard: Flex Dashboard
+
+Packages: ggwordcloud, ggplot2, dplyr, tidyverse, tmaptools, skimr, Hmisc, devtools ...
+
+### Dataset
+
+https://www.kaggle.com/sujan97/usa-foreign-workers-salary
+
+### Tips
+
+Please open the html file in the full screen
+
+### Author
+
+Guiming Xu
+
+
+Data Preprocessing {data-orientation=rows}
+=====================================   
+
+Column
+-----------------------------------
+
+### Null Values
+
+To begin with, the raw dataset has several columns contained null values,
+and the number of missing values is kind of large.
+
+I mainly used two methods to deal with this situalition:
+
+1. Fulfilling by other values
+2. Drop the row contained null values
+
+So after these two methods, the dataset is cleaned and tidy.
+
+-----------------------------------------------------------------------
+### Before manipulating null values
+
+```{r}
+gg_miss_var(foreign_worker)
+```
+
+
+```{r}
+foreign_worker$EDUCATION_LEVEL_REQUIRED[is.na(foreign_worker$EDUCATION_LEVEL_REQUIRED)]= "Not Available"
+
+foreign_worker$COLLEGE_MAJOR_REQUIRED[is.na(foreign_worker$COLLEGE_MAJOR_REQUIRED)] = 'Not Available'
+
+foreign_worker$EXPERIENCE_REQUIRED_Y_N[is.na(foreign_worker$EXPERIENCE_REQUIRED_Y_N)] = 'Not Available'
+
+foreign_worker$EXPERIENCE_REQUIRED_NUM_MONTHS[is.na(foreign_worker$EXPERIENCE_REQUIRED_NUM_MONTHS)] = 0
+
+foreign_worker$COUNTRY_OF_CITIZENSHIP[is.na(foreign_worker$COUNTRY_OF_CITIZENSHIP)] = 'Not Available'
+
+foreign_worker = foreign_worker %>% replace_na(list(WORK_POSTAL_CODE=0))
+foreign_worker = foreign_worker %>% replace_na(list(FULL_TIME_POSITION_Y_N='n'))
+foreign_worker = foreign_worker %>% replace_na(list(PREVAILING_WAGE_PER_YEAR=999999))
+```
+
+Column
+-----------------------------------------------------------------------
+
+### After manupilating null values
+
+```{r}
+vis_miss(foreign_worker,warn_large_data = FALSE)
+```
+
+### Dataset Table
+
+```{r}
+DT::datatable(head(foreign_worker), options = list(
+  pageLength = 8
+))
+```
+
+```{r}
+foreign_worker <- as.data.frame(foreign_worker)
+
+foreign_worker$CASE_STATUS = as.factor(foreign_worker$CASE_STATUS)
+foreign_worker$CASE_RECEIVED_DATE = strptime(foreign_worker[['CASE_RECEIVED_DATE']], format='%m/%d/%Y')
+foreign_worker$DECISION_DATE = strptime(foreign_worker[['DECISION_DATE']], format='%m/%d/%Y')
+foreign_worker$PREVAILING_WAGE_SUBMITTED = as.numeric(foreign_worker$PREVAILING_WAGE_SUBMITTED)
+foreign_worker$PAID_WAGE_SUBMITTED = as.numeric(foreign_worker$PAID_WAGE_SUBMITTED)
+foreign_worker$EDUCATION_LEVEL_REQUIRED = as.factor(foreign_worker$EDUCATION_LEVEL_REQUIRED)
+foreign_worker$COLLEGE_MAJOR_REQUIRED = as.factor(foreign_worker$COLLEGE_MAJOR_REQUIRED)
+foreign_worker$EXPERIENCE_REQUIRED_Y_N = as.factor(foreign_worker$EXPERIENCE_REQUIRED_Y_N)
+foreign_worker$EXPERIENCE_REQUIRED_NUM_MONTHS = as.numeric(foreign_worker$EXPERIENCE_REQUIRED_NUM_MONTHS)
+foreign_worker$FULL_TIME_POSITION_Y_N = as.factor(foreign_worker$FULL_TIME_POSITION_Y_N)
+foreign_worker$VISA_CLASS = as.factor(foreign_worker$VISA_CLASS)
+foreign_worker$PAID_WAGE_PER_YEAR = as.numeric(foreign_worker$PAID_WAGE_PER_YEAR)
+
+foreign_worker = subset(foreign_worker,select = -c(order,PREVAILING_WAGE_SOC_CODE,EMPLOYER_NAME,CASE_NUMBER))
+
+foreign_worker = foreign_worker[(foreign_worker$PREVAILING_WAGE_SUBMITTED_UNIT == 'year'),]
+foreign_worker = subset(foreign_worker,select = -c(PREVAILING_WAGE_PER_YEAR,PAID_WAGE_PER_YEAR))
+
+foreign_worker = foreign_worker[(foreign_worker$PAID_WAGE_SUBMITTED_UNIT == 'year'),]
+```
+
+Simple Data Visualization(One Variable) {data-navmenu="Variable Analysis"}
+=====================================   
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+1. From **Plot One**
+
+The Plot below is to analyze the count of different case status.
+
+we can make this conclusion: most applications are certified, just a quite small proportion of applications are denied.
+
+2. From **Plot two**
+
+The Plot below is to analyze the count of different visa class.
+
+It is obvious most applications are working under H-1B Visa.
+
+3. From **Plot three**
+
+The Plot below is to analyze the Job Title of applications.
+
+We can find the software engineers and business analyst cover 85% of applications.
+
+4. From **Plot four**
+
+The Plot below is to analyze distribution of prevailing salary and submitted salary
+
+we can find most applications' salary is around $15000 per year, and these two types of variables' distribution is similar.
+
+
+
+Row
+-----------------------------------------------------------------------
+
+
+### **CASE_STATUS (Plot One)**
+
+```{r}
+ggplot(foreign_worker, aes(x=CASE_STATUS, fill=as.factor(CASE_STATUS))) + 
+  geom_bar() +
+  scale_color_brewer(palette="Dark2")+
+  xlab("CASE STATUS") +
+  ylab("COUNT") +
+  theme_bw() +
+  coord_flip() +
+  ggtitle('The count of different case status') +
+  theme(legend.title = element_blank()) +
+  labs(caption = "Plot Number: One")
+```
+
+
+-----------------------------------------------------------------------
+
+### **VISA CLASS (Plot Two)**
+
+```{r}
+ggplot(foreign_worker, aes(x=VISA_CLASS, fill=as.factor(VISA_CLASS))) + 
+  geom_bar() +
+   scale_fill_manual(values=c("#999999", "#E69F00","#56B4E9",'red','blue'))+
+  xlab("VISA CLASS") +
+  ylab("COUNT") +
+  theme_bw() +
+  coord_flip() +
+  ggtitle('The count of different visa class') +
+  theme(legend.title = element_blank()) +
+  labs(caption = "Plot Number: Two")
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+
+### **Job Title (Plot Three)**
+
+```{r,fig.width = 5, fig.height = 4}
+ggplot(data = foreign_worker, aes(x = factor(JOB_TITLE_SUBGROUP), 
+                          y = prop.table(stat(count)),  
+                          label = scales::percent(prop.table(stat(count))))) +
+    geom_bar(position = "dodge",fill = rownames(foreign_worker)[1:8]) + 
+  scale_fill_brewer(palette = "Pastel2") +
+    geom_text(stat = 'count',
+              position = position_dodge(.9), 
+              hjust = -0.1, 
+              size = 3) + 
+    labs(x = 'job title', y = 'pct') +
+    coord_flip() +
+  ggtitle('Percentage of each job title')+
+  theme(legend.title = element_blank()) +
+  labs(caption = "Plot Number: Three")
+```
+
+
+
+### **Wage (Plot Four)**
+
+```{r}
+ggplot()+
+  geom_density(data=foreign_worker,aes(x=PREVAILING_WAGE_SUBMITTED),color="cornflowerblue", fill="azure3",alpha=0.5) +
+  geom_density(data=foreign_worker,aes(x=PAID_WAGE_SUBMITTED),color="cyan3",
+    fill="brown4",alpha=0.5) + 
+  ggtitle('The plot of prevailing salary and submitted salary')+
+  theme(legend.title = element_blank()) +
+  labs(caption = "Plot Number: Four")
+```
+
+
+More Data Visualization(Multiple Variable){data-navmenu="Variable Analysis"}
+=====================================   
+
+```{r}
+foreign_worker_2 = foreign_worker %>% filter(nchar(WORK_STATE) == 2)
+
+mean_salary = foreign_worker_2 %>% group_by(WORK_STATE) %>% summarise_at(vars(PAID_WAGE_SUBMITTED), funs(mean(., na.rm=TRUE)))
+
+top_mean_salary = mean_salary %>% top_n(10,wt=PAID_WAGE_SUBMITTED) %>% arrange(desc(PAID_WAGE_SUBMITTED))
+
+least_mean_salary = mean_salary %>% top_n(-10,wt=PAID_WAGE_SUBMITTED) %>% arrange(desc(PAID_WAGE_SUBMITTED))
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+From **The Plot Five**  is to analyze the top 10 states' salary.
+
+All of these states' average salary is above $70000 per year,
+and California, Washington, New York, and West Virginia, these states' average salary is above $90000 per year
+
+This conclusion is reasonable, because we know there are lots of technology company in these states except West Virginia.
+
+From **The Plot Six** is to analyze the top 10 least states' salary.
+
+All of these states' average salary is around $50000 per year,
+
+Due to the plot, these states do not have too much technology company, so the result is reasonable.
+
+
+Column
+-----------------------------------------------------------------------
+
+
+### **Top 10 highest salary state (Plot Five)**
+
+```{r}
+ggplot(top_mean_salary, aes(x=WORK_STATE, y=PAID_WAGE_SUBMITTED,fill=(PAID_WAGE_SUBMITTED > 90000))) + 
+  geom_bar(stat='identity') +
+  scale_fill_manual(labels = c("FALSE" = "Less than 90000 Per Year", "TRUE" = "Above 90000 Per Year"), 
+                         values = c("#E69F00", '#CC6666')) +
+  theme(axis.text.x=element_text(angle=90,hjust=1))+
+  theme(legend.title = element_blank()) +
+  labs(caption = "Plot Number: Five")
+  
+```
+
+
+
+### **Top 10 least salary state (Plot Six)**
+
+```{r}
+ggplot(least_mean_salary, aes(x=WORK_STATE, y=PAID_WAGE_SUBMITTED,fill=(PAID_WAGE_SUBMITTED > 50000))) + 
+  geom_bar(stat='identity') +
+  scale_fill_manual(labels = c("FALSE" = "Less than 50000 Per Year", "TRUE" = "Above 50000 Per Year"), 
+                         values = c( "#F0E442","#009E73")) +
+  theme(axis.text.x=element_text(angle=90,hjust=1),legend.title = element_blank()) +
+  labs(caption = "Plot Number: Six")
+```
+
+
+Column
+-----------------------------------------------------------------------
+
+### Case Status & Job Title
+
+```{r}
+ggplot(foreign_worker, aes(x=JOB_TITLE_SUBGROUP,fill=JOB_TITLE_SUBGROUP,alpha=class)) +
+    geom_histogram(alpha=0.2,stat='count') +
+    coord_flip() +
+    facet_wrap(~CASE_STATUS) +
+    scale_alpha_discrete(range = c(0.4,1)) +
+  theme_bw()+
+  theme(axis.text.x=element_text(angle=90,hjust=1))
+ 
+    
+```
+
+### Case Status and Job Title Analysis
+
+The count of different case status under different job title is kind of similar with the 
+count plot of job title, and business analyst and teacher look like all get the certified case status.
+
+
+Column
+-----------------------------------------------------------------------
+
+### Paid Wage & Job Status
+
+```{r}
+
+foreign_worker %>% 
+ggplot(aes(x=JOB_TITLE_SUBGROUP,y=PAID_WAGE_SUBMITTED)) + 
+  geom_boxplot(varwidth=TRUE,alpha=0.2) +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  facet_wrap(.~FULL_TIME_POSITION_Y_N,labeller = labeller(FULL_TIME_POSITION_Y_N = 
+    c("n" = "Not Full Time",
+      "y" = "Full Time"))) +
+  theme(
+      strip.text.x = element_text(
+      size = 12, color = "red", face = "bold.italic"
+        )) +
+  ggtitle('The Dot Plot of Salary under full time or not full time job')
+  
+
+```
+
+### Paid Wage & Job Status Analysis
+
+The Plot below is to analyze Paid Wage and Job Title.
+
+we can find full-time jobs have much higher average salary than not full-time jobs' salary.
+
+Time Series Data Visualization
+===================================== 
+
+Column
+-----------------------------------------------------------------------
+
+
+### **Number of applications & Year (Plot Seven)**
+
+The Plot is showing the number applications under different years
+
+Because we do not have the data for the whole 2015, so there is a wrong decreasing trend.
+
+Generally, The number of applications are increasing from 2012 to 2015.
+
+And the number of software engineers applications is the largest.
+
+### **Decision Date & Job Title (Plot Seven)**
+
+```{r}
+foreign_worker$DECISION_YEAR = substring(foreign_worker$DECISION_DATE,0,4)
+job_year_count = foreign_worker %>% group_by(DECISION_YEAR,JOB_TITLE_SUBGROUP) %>% count()
+```
+
+```{r}
+
+ggplot(data=job_year_count, aes(x=DECISION_YEAR, y=n, group=JOB_TITLE_SUBGROUP, colour=JOB_TITLE_SUBGROUP)) +
+    geom_line(size=1.1) +
+    geom_point(fill='white') +
+   scale_color_brewer(palette = 'Set1') +
+  ggtitle('The number of applications in each year') +
+  xlab('Application Year') +
+  ylab('Number')
+```
+
+Column
+-----------------------------------------------------------------------
+
+
+
+### **Salary Under Year (Plot Eight)**
+
+```{r}
+
+foreign_worker$DECISION_MONTH = substring(foreign_worker$DECISION_DATE,0,7)
+
+salary_range = foreign_worker %>% group_by(DECISION_MONTH) %>% mutate(max_salary = max(PAID_WAGE_SUBMITTED),min_salary=min(PAID_WAGE_SUBMITTED),mean_salary = mean(PAID_WAGE_SUBMITTED)) %>% select(DECISION_MONTH,max_salary,min_salary,mean_salary)
+salary_range = unique(salary_range)
+```
+
+```{r}
+ggplot(salary_range, aes(x = DECISION_MONTH,y=mean_salary,group=1)) + 
+  geom_ribbon(aes(ymin = min_salary, ymax = max_salary),  alpha = 0.2,fill='red') +
+  geom_line(color='lightgreen',size=1.2) +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) + 
+  ggtitle('The mean salary in each month with shaded min and max salary')
+```
+
+Column
+-------------------------------------
+### Salary Table
+
+
+```{r}
+DT::datatable(salary_range, options = list(
+  pageLength = 8
+))
+```
+
+
+### **Paid Wage Under Year (Plot Eight)**
+
+The Plot below is to analyze Paid Wage Under Year, and the shaded part is max and min salary in each year
+
+So the average salary in each year is very stable.
+
+```{r}
+usgeo = read_sf('data/tl_2019_us_county-1/tl_2019_us_county.shp')
+```
+
+
+```{R}
+foreign_worker = foreign_worker[!(foreign_worker$WORK_POSTAL_CODE == 0),]
+foreign_worker$WORK_POSTAL_CODE = as.integer(foreign_worker$WORK_POSTAL_CODE)
+foreign_worker = foreign_worker %>% drop_na(WORK_POSTAL_CODE)
+foreign_worker$WORK_POSTAL_CODE = str_pad(foreign_worker$WORK_POSTAL_CODE,max(nchar(foreign_worker$WORK_POSTAL_CODE)),side="left", pad="0")
+foreign_worker$WORK_POSTAL_CODE = substr(foreign_worker$WORK_POSTAL_CODE,5,10)
+```
+
+```{r}
+foreign_worker$YEAR = substring(foreign_worker$CASE_RECEIVED_DATE,0,4)
+foreign_worker_certified_percent = foreign_worker %>% group_by(YEAR,WORK_STATE,WORK_CITY) %>% mutate(count = n(),
+                                                                                       certified = sum(CASE_STATUS == 'certified'), certified_percent = certified/count) %>% select(certified_percent,WORK_POSTAL_CODE)
+```
+
+
+```{r}
+data(zip_codes)
+foreign_worker_certified_percent = right_join(zip_codes, foreign_worker_certified_percent,by=c("zip"="WORK_POSTAL_CODE"))
+foreign_worker_certified_percent$fips = as.character(foreign_worker_certified_percent$fips)
+foreign_worker_certified_percent = foreign_worker_certified_percent %>% filter(YEAR >= 2012)
+```
+
+Geospatial Data Visualization{data-navmenu="Geospatial"}
+===================================== 
+
+Column
+-----------------------------------------------------------------------
+
+### Texas
+
+```{r}
+texas_geo <- filter(usgeo,STATEFP=='48')
+texas_geo$NAME <- as.character(texas_geo$NAME)
+texas_map <- left_join(texas_geo, foreign_worker_certified_percent,by=c("GEOID"="fips"))
+texas_map = na.locf(na.locf(texas_map), fromLast = TRUE)
+texas_plot = tm_shape(texas_map) +
+tm_fill("certified_percent", title="percent of certified applications in Texas", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_facets(by=c('YEAR'),ncol=1) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of certified applications in Texas',main.title.size=1,legend.outside = TRUE)
+texas_plot
+```
+
+### Texas
+
+As a trend graph, you can see that over time, more and more applicants are showing up in Texas, and the number of certified cases in Texas is increasing (with more green areas)
+
+Column
+-----------------------------------------------------------------------
+
+### Seattle
+
+```{r}
+seattle_geo <- filter(usgeo,STATEFP=='55')
+seattle_geo$NAME <- as.character(seattle_geo$NAME)
+seattle_map <- left_join(seattle_geo, foreign_worker_certified_percent,by=c("GEOID"="fips"))
+seattle_map = na.locf(na.locf(seattle_map), fromLast = TRUE)
+seattle_plot = tm_shape(seattle_map) +
+tm_fill("certified_percent", title="percent of certified cases in Seattle", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_facets(by=c('YEAR'),ncol=1) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of certified cases in Seattle',main.title.size=1,legend.outside = TRUE)
+texas_plot
+```
+
+### Seattle
+
+As a trend graph, Seattle has nearly same trend as Texas's, but Seattle has more green area than Texas's.
+
+Geospatial Data Visualization{data-navmenu="Geospatial"}
+===================================== 
+
+Column
+-----------------------------------------------------------------------
+
+### California
+
+```{r}
+ca_geo <- filter(usgeo,STATEFP=='26')
+ca_geo$NAME <- as.character(ca_geo$NAME)
+ca_map <- left_join(ca_geo, foreign_worker_certified_percent,by=c("GEOID"="fips"))
+ca_map = na.locf(na.locf(ca_map), fromLast = TRUE)
+ca_plot = tm_shape(ca_map) +
+tm_fill("certified_percent", title="percent of votes for democrat in Calidornia", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_facets(by=c('YEAR'),ncol=1) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of votes for democrat in California',main.title.size=1,legend.outside = TRUE)
+ca_plot
+```
+
+Column
+--------------------------------------------------------------
+### Virginia
+
+```{r}
+ca_geo <- filter(usgeo,STATEFP=='36')
+ca_geo$NAME <- as.character(ca_geo$NAME)
+ca_map <- left_join(ca_geo, foreign_worker_certified_percent,by=c("GEOID"="fips"))
+ca_map = na.locf(na.locf(ca_map), fromLast = TRUE)
+ca_plot = tm_shape(ca_map) +
+tm_fill("certified_percent", title="percent of votes for democrat in Calidornia", palette = "PRGn") +
+tm_borders(alpha=.5) +
+  tm_facets(by=c('YEAR'),ncol=1) +
+  tm_style('classic') +
+  tm_layout(main.title = 'Percent of votes for democrat in California',main.title.size=1,legend.outside = TRUE)
+ca_plot
+
+```
+
+Input{.sidebar}
+-----------------------------------------------------------------------
+
+As a trend graph, these two states have same trend that both states have more green area when time passes by, and most of area in the state turns to green in 2015.
+
+Text Data Visualization(Word Cloud)
+=====================================
+
+Column
+------------------------------------------------------------------
+
+### abc
+
+```{r}
+word_cloud = foreign_worker %>% group_by(YEAR,COLLEGE_MAJOR_REQUIRED) %>% count()
+word_cloud = word_cloud %>% filter(YEAR >= 2013 & COLLEGE_MAJOR_REQUIRED != 'Not Available' & YEAR < 2015)
+word_cloud = word_cloud %>% arrange(desc(n))
+ggplot(word_cloud[1:1000,], aes(
+  label = COLLEGE_MAJOR_REQUIRED, size = n,color = n
+),scale=c(6,5), min.freq = 1,) +
+  geom_text_wordcloud_area() +
+  scale_size_area(max_size = 8) +
+  theme_minimal() +
+  facet_wrap(~YEAR) +
+  ggtitle('The Keyword of college major requirement in each year')
+```
+
+
+Column
+--------------------------------------------------------
+
+> Word Cloud
+
+### About graphs on the left and below
+
+With the two word cloud images above, I mainly want to get the career keywords for each year, from the first one college degree requirements, computer science and related fields are always in demand, and from the second job title, data analyst and senior software. engineer was the most mentioned. So you can see that the IT field is in need of a lot of talent.
+
+### Top 10 most applications job from 2012-2014
+
+```{r,fig.width=7,fig.height=8}
+word_cloud = foreign_worker %>% group_by(YEAR,JOB_TITLE_SUBGROUP) %>% count()
+word_cloud = word_cloud %>% filter(YEAR >= 2013 & JOB_TITLE_SUBGROUP != 'Not Available' & YEAR < 2015)
+word_cloud = head(word_cloud%>%group_by(YEAR),20)
+word_cloud$JOB_TITLE_SUBGROUP <- reorder(word_cloud$JOB_TITLE_SUBGROUP, word_cloud$n)
+
+ggplot(word_cloud, aes(x = JOB_TITLE_SUBGROUP, y = n, fill = JOB_TITLE_SUBGROUP, label = n)) +
+  geom_bar(stat="identity", show.legend = FALSE) +
+  coord_flip() +
+  labs(title = "Top 10 Most applications job", x = "Year", y = "Job") +
+  geom_label(aes(fill = JOB_TITLE_SUBGROUP),colour = "white", fontface = "bold", show.legend = FALSE) +
+  facet_wrap(~YEAR)
+```
+
+Network Data Visualization
+============================================================
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+Due to the network graph,
+
+we can find most E-3 Australian Visa applications go to CA ans NY
+
+most H-1B1 Singapore Visa applications go to CA and NY too
+
+H1B Visa applications go to the five states I select.
+
+
+Row
+-------------------------------------------------------------
+
+### Visa Flow (igraph)
+
+```{r}
+aaa = foreign_worker %>% select(VISA_CLASS,WORK_STATE) %>% filter(nchar(WORK_STATE) == 2 )
+aaa = subset(aaa,WORK_STATE %in% c('CA','NY','TX','VA','MD'))
+glab = graph.data.frame(as.matrix(aaa[1:1000,]), directed = TRUE)
+LOC = layout_components(glab)
+qgraph(as.matrix(aaa[1:1000,]),directed=TRUE,layout=LOC,tuning = 0)
+```
+
+### Visa Flow II (Arc Diagram)
+
+```{r}
+aaa = foreign_worker %>% select(VISA_CLASS,WORK_STATE) %>% filter(nchar(WORK_STATE) == 2 )
+aaa = subset(aaa,WORK_STATE %in% c('CA','NY','TX','VA','MD'))
+glab = graph.edgelist(as.matrix(aaa)[1:1000,], directed = TRUE)
+
+lab_degree = degree(glab)
+set.seed(123)
+E(glab)$weight = round(runif(nrow(aaa), 0.5, 4))
+
+gclus = clusters(glab)
+
+blues = c("#adccff", "#4272bf")
+
+cols = blues[gclus$membership]
+order = c('H-1B','E-3 Australian','H-1B1 Singapore','H-1B1 Chile','CA','TX','MD','NY','VA')
+arcplot(as.matrix(aaa)[1:1000,],col.nodes=cols,bg.nodes = cols,show.nodes=TRUE,cex.nodes = 0.005*lab_degree,lwd.arcs = 1.5 * E(glab)$weight,ordering=order)
+```

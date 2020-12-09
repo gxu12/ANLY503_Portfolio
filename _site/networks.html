@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>ANLY503_HW7</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="Assignment1.html">Homework 1</a>
+</li>
+<li>
+  <a href="Assignment2.html">Homework 2</a>
+</li>
+<li>
+  <a href="Assignment3.html">Homework 3</a>
+</li>
+<li>
+  <a href="Assignment4.html">Homework 4</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Homework 5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ANLY503_Q1.html">Question One</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q2.html">Question Two</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q3.html">Question Three</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q4.html">Question Four</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q5.html">Question Five</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="a6.html">Homework 6</a>
+</li>
+<li>
+  <a href="networks.html">Homework 7</a>
+</li>
+<li>
+  <a href="ANLY503_Final.html">Final Project</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">ANLY503_HW7</h1>
+
+</div>
+
+
+<p>##Task One</p>
+<pre class="r"><code>rm(list=ls())
+library(&quot;readxl&quot;)
+library(dplyr)
+library(tidyverse)
+d&lt;- read_xls(&quot;data/State_to_State_Migrations_Table_2018.xls&quot;)</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * `` -&gt; ...6
+## * ...</code></pre>
+<p>##Task Two</p>
+<pre class="r"><code>temp&lt;-d
+temp&lt;-temp[-c(1:5, 78:86), -(2:9)]# remove footnotes and extra columns
+
+colnames(temp)&lt;-c() # remove column names from the orignal table
+unlist(c(temp[,1])) # check row names</code></pre>
+<pre><code>##  [1] NA                     NA                     NA                    
+##  [4] &quot;United States2&quot;       NA                     &quot;Alabama&quot;             
+##  [7] &quot;Alaska&quot;               &quot;Arizona&quot;              &quot;Arkansas&quot;            
+## [10] &quot;California&quot;           NA                     &quot;Colorado&quot;            
+## [13] &quot;Connecticut&quot;          &quot;Delaware&quot;             &quot;District of Columbia&quot;
+## [16] &quot;Florida&quot;              NA                     &quot;Georgia&quot;             
+## [19] &quot;Hawaii&quot;               &quot;Idaho&quot;                &quot;Illinois&quot;            
+## [22] &quot;Indiana&quot;              NA                     &quot;Iowa&quot;                
+## [25] &quot;Kansas&quot;               &quot;Kentucky&quot;             &quot;Louisiana&quot;           
+## [28] &quot;Maine&quot;                NA                     &quot;Maryland&quot;            
+## [31] &quot;Massachusetts&quot;        &quot;Michigan&quot;             &quot;Minnesota&quot;           
+## [34] &quot;Mississippi&quot;          NA                     &quot;Missouri&quot;            
+## [37] &quot;Montana&quot;              NA                     &quot;Current residence in&quot;
+## [40] NA                     NA                     NA                    
+## [43] &quot;Nebraska&quot;             &quot;Nevada&quot;               &quot;New Hampshire&quot;       
+## [46] &quot;New Jersey&quot;           &quot;New Mexico&quot;           NA                    
+## [49] &quot;New York&quot;             &quot;North Carolina&quot;       &quot;North Dakota&quot;        
+## [52] &quot;Ohio&quot;                 &quot;Oklahoma&quot;             NA                    
+## [55] &quot;Oregon&quot;               &quot;Pennsylvania&quot;         &quot;Rhode Island&quot;        
+## [58] &quot;South Carolina&quot;       &quot;South Dakota&quot;         NA                    
+## [61] &quot;Tennessee&quot;            &quot;Texas&quot;                &quot;Utah&quot;                
+## [64] &quot;Vermont&quot;              &quot;Virginia&quot;             NA                    
+## [67] &quot;Washington&quot;           &quot;West Virginia&quot;        &quot;Wisconsin&quot;           
+## [70] &quot;Wyoming&quot;              NA                     &quot;Puerto Rico&quot;</code></pre>
+<pre class="r"><code>state_names&lt;- unlist(c(temp[,1]))[which(!is.na(unlist(c(temp[,1]))))]
+#length(state_names) # should be 52
+# state_names[c(1, 29)] are not state names
+state_names &lt;- state_names[-c(1, 29)]
+print(state_names)</code></pre>
+<pre><code>##  [1] &quot;Alabama&quot;              &quot;Alaska&quot;               &quot;Arizona&quot;             
+##  [4] &quot;Arkansas&quot;             &quot;California&quot;           &quot;Colorado&quot;            
+##  [7] &quot;Connecticut&quot;          &quot;Delaware&quot;             &quot;District of Columbia&quot;
+## [10] &quot;Florida&quot;              &quot;Georgia&quot;              &quot;Hawaii&quot;              
+## [13] &quot;Idaho&quot;                &quot;Illinois&quot;             &quot;Indiana&quot;             
+## [16] &quot;Iowa&quot;                 &quot;Kansas&quot;               &quot;Kentucky&quot;            
+## [19] &quot;Louisiana&quot;            &quot;Maine&quot;                &quot;Maryland&quot;            
+## [22] &quot;Massachusetts&quot;        &quot;Michigan&quot;             &quot;Minnesota&quot;           
+## [25] &quot;Mississippi&quot;          &quot;Missouri&quot;             &quot;Montana&quot;             
+## [28] &quot;Nebraska&quot;             &quot;Nevada&quot;               &quot;New Hampshire&quot;       
+## [31] &quot;New Jersey&quot;           &quot;New Mexico&quot;           &quot;New York&quot;            
+## [34] &quot;North Carolina&quot;       &quot;North Dakota&quot;         &quot;Ohio&quot;                
+## [37] &quot;Oklahoma&quot;             &quot;Oregon&quot;               &quot;Pennsylvania&quot;        
+## [40] &quot;Rhode Island&quot;         &quot;South Carolina&quot;       &quot;South Dakota&quot;        
+## [43] &quot;Tennessee&quot;            &quot;Texas&quot;                &quot;Utah&quot;                
+## [46] &quot;Vermont&quot;              &quot;Virginia&quot;             &quot;Washington&quot;          
+## [49] &quot;West Virginia&quot;        &quot;Wisconsin&quot;            &quot;Wyoming&quot;             
+## [52] &quot;Puerto Rico&quot;</code></pre>
+<pre class="r"><code>length(state_names) </code></pre>
+<pre><code>## [1] 52</code></pre>
+<pre class="r"><code>r_names&lt;-unlist(c(temp[,1]))
+c_names&lt;-unlist(c(temp[1,]))</code></pre>
+<pre class="r"><code># construct a matrix, where each element represents &#39;count&#39;,
+# from the i^th state to j^th state
+# note that the diag elements in this matrix are NA
+d_matrix&lt;- matrix(0, nrow =52, ncol= 52)
+for(i in 1:52){
+  from = state_names[i]
+  for(j in 1:52){
+  to= state_names[j]
+  esti=as.numeric(temp[which(r_names == from) , which(c_names==to)])
+  d_matrix[i,j] = esti
+  }
+}</code></pre>
+<pre><code>## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion
+
+## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code># convert the matrix of count to long format
+data_final&lt;- matrix(0, ncol= 3, nrow = 52*51)
+kk=1
+for(i in 1:52){
+  for(j in 1:52){
+    temp_count &lt;- d_matrix[i,j]
+    if(!is.na(temp_count)){
+      data_final[kk, ]&lt;-c(state_names[i], state_names[j], temp_count)
+      kk=kk+1
+      }
+
+  }
+}
+colnames(data_final)&lt;-c(&#39;source&#39;, &#39;final&#39;, &#39;count&#39;)
+head(data_final)</code></pre>
+<pre><code>##      source    final         count 
+## [1,] &quot;Alabama&quot; &quot;Alaska&quot;      &quot;419&quot; 
+## [2,] &quot;Alabama&quot; &quot;Arizona&quot;     &quot;1915&quot;
+## [3,] &quot;Alabama&quot; &quot;Arkansas&quot;    &quot;1051&quot;
+## [4,] &quot;Alabama&quot; &quot;California&quot;  &quot;2659&quot;
+## [5,] &quot;Alabama&quot; &quot;Colorado&quot;    &quot;1672&quot;
+## [6,] &quot;Alabama&quot; &quot;Connecticut&quot; &quot;747&quot;</code></pre>
+<div id="task-three-and-task-four" class="section level2">
+<h2>Task Three and Task Four</h2>
+<pre class="r"><code>data_final = data.frame(data_final)
+data_final$count = as.numeric(data_final$count)
+data_final$source[data_final$source == &#39;District of Columbia&#39;] &lt;- &#39;DC&#39;</code></pre>
+<pre class="r"><code>library(circlize)</code></pre>
+<pre><code>## ========================================
+## circlize version 0.4.11
+## CRAN page: https://cran.r-project.org/package=circlize
+## Github page: https://github.com/jokergoo/circlize
+## Documentation: https://jokergoo.github.io/circlize_book/book/
+## 
+## If you use it in published research, please cite:
+## Gu, Z. circlize implements and enhances circular visualization
+##   in R. Bioinformatics 2014.
+## 
+## This message can be suppressed by:
+##   suppressPackageStartupMessages(library(circlize))
+## ========================================</code></pre>
+<pre><code>## 
+## Attaching package: &#39;circlize&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:igraph&#39;:
+## 
+##     degree</code></pre>
+<pre class="r"><code>source_state=c(&#39;New York&#39;, &#39;Texas&#39;, &#39;Maryland&#39;, &#39;Virginia&#39;)
+network = data_final %&gt;% filter(source %in% source_state) %&gt;% group_by(source) %&gt;% top_n(10, wt=count)
+
+state_col = c(&#39;New York&#39; = &quot;#377EB8&quot;,&#39;Texas&#39;=&#39;#E41A1C&#39;,&#39;Maryland&#39;=&#39;#E41A1C&#39;,&#39;Virginia&#39;=&#39;#377EB8&#39;)
+state_col2 = c(state_col, state_col)
+
+col_mat = rand_color(length(network), transparency = 0.5)
+
+chordDiagram(network,grid.col = state_col2,annotationTrack = c(&#39;grid&#39;), 
+    preAllocateTracks = list(list(track.height = 0.1)))
+
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data(&quot;xlim&quot;)
+  ylim = get.cell.meta.data(&quot;ylim&quot;)
+  sector.name = get.cell.meta.data(&quot;sector.index&quot;)
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = &quot;clockwise&quot;, niceFacing = TRUE, adj = c(-0.4, 0.8),cex=0.8,col=&#39;brown&#39;)
+  circos.axis(h = &quot;top&quot;, labels.cex = 0.5, major.tick.length = 0.2, sector.index = sector.name, track.index = 2)
+}, bg.border = NA)
+
+title(main=&quot;Top 10 Migration Destinations of NY, TX, MD and VA&quot;, cex=1)</code></pre>
+<p><img src="networks_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p style="color:red">
+Red: Export Migrations
+</p>
+<p style="color:blue">
+Blue: Import Migrations
+</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

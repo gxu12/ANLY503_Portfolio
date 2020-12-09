@@ -6,3 +6,35 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: 'Homework 1'
+      href: Assignment1.html
+    - text: 'Homework 2'
+      href: Assignment2.html 
+    - text: 'Homework 3'
+      href: Assignment3.html
+    - text: 'Homework 4'
+      href: Assignment4.html
+    - text: 'Homework 5'
+      menu:
+        - text: 'Question One'
+          href: ANLY503_Q1.html
+        - text: 'Question Two'
+          href: ANLY503_Q2.html
+        - text: 'Question Three'
+          href: ANLY503_Q3.html
+        - text: 'Question Four'
+          href: ANLY503_Q4.html
+        - text: 'Question Five'
+          href: ANLY503_Q5.html
+    - text: 'Homework 6'
+      href: a6.html
+    - text: 'Homework 7'
+      href: networks.html
+    - text: 'Final Project'
+      href: ANLY503_Final.html
+
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    css: styles.css

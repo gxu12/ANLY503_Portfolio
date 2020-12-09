@@ -1,0 +1,127 @@
+---
+title: "ANLY503_Q2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# loan the packages
+library(dplyr)
+library(ggplot2)
+library(visdat)
+library(hrbrthemes)
+library(naniar)
+library(Hmisc)
+library(skimr)
+
+theme_set(theme_classic()+theme(axis.text = element_text(size=14),
+                                axis.title = element_text(size=16),
+                                legend.text = element_text(size=14),
+                                legend.title = element_text(size=16),
+                                plot.title = element_text(size=18),
+                                plot.subtitle = element_text(size=16),
+                                plot.caption = element_text(size=12)))
+```
+
+# Question Two:
+
+
+## <span style="color:red">R Version:</span>
+
+```{r}
+# load datasets
+transactions = read.csv('./data/transactions.csv')
+accounts = read.csv('./data/accounts_analytical.csv')
+```
+
+### What is the distribution of all loans and what are their characteristics?
+
+the distribution of loan_amount
+
+**Plot 1: loan_amount versus loan_status**
+
+```{r}
+# to plot the distribution of loan_amount under different loan_status
+ggplot(accounts, aes(x=loan_amount, fill=loan_status)) +
+  geom_histogram(alpha=.5, position="identity") +
+  ggtitle('plot of distribution of loan_amount and loan_status')
+```
+
+**Plot 2: distribution of loan_term**
+
+```{r}
+# count plot of loan_term
+loan_term_counts = as.data.frame(table(accounts$loan_term))
+ggplot(loan_term_counts,aes(x=as.factor(Var1),y=as.factor(Freq),fill=Freq)) +
+  geom_bar(stat='identity') +
+  scale_color_brewer(palette="Dark2") +
+  xlab("loan_term") +
+  ylab("count") +
+  ggtitle('the frequency of loan term')
+```
+
+**Plot 3: Boxplot of loan_default, and loan_amount**
+
+```{r}
+# to plot the boxplot of loan_default and loan_amount
+accounts$loan_default[is.na(accounts$loan_default)] <- 'Unknown'
+
+bp<-ggplot(accounts, aes(x=loan_default, y=loan_amount, fill=loan_default)) +
+  geom_boxplot()
+bp + scale_fill_brewer(palette="Dark2") +
+  ggtitle('Boxplot of loan amount under different loan_default')
+```
+
+### Conclusion:
+1. the distribution of loan_amount under different loan_status is similar
+
+   but loan_status == True will have kind of higher loan_amount.
+
+2. we can find loan_term = 36 months has the least count,
+
+   but other loan_term has simialr counts by the distribution of loan_term 
+
+3. we can find if loan_default = True, account will have higher loan_amount
+
+   than account does not have default loan
+   
+   
+## <span style="color:red">Python Version:</span>
+
+```{python}
+# import packages
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+### load the datasets
+
+```{python}
+transactions = pd.read_csv('./data/transactions.csv')
+accounts = pd.read_csv('./data/accounts_analytical.csv')
+```
+
+**Plot One: Loan Term versus Loan Status**
+
+```{python}
+# use loan_status as hue to plot loan term
+ax = sns.countplot(x='loan_term',hue='loan_status',data=accounts,palette='Set2')
+ax.legend(loc='center right', bbox_to_anchor=(1.15, 0.5), ncol=1)
+ax.set_title('the loan term under different loan status')
+```
+
+**Plot Two: Loan Default versus Loan Amount**
+
+```{python}
+ax = sns.boxplot(x='loan_default',y='loan_amount',data=accounts,palette='Set1')
+ax.set_title('Loan Amount under default loan account and not default loan account')
+ax
+```
+
+### Conclusion:
+
+1. most loan_status = expired account has short loan term like 12 and 24 months, 
+
+and most loan_status = current has long loan term like 48 and 60 months
+
+2.loan_default = True account have higher loan amount than loan_default = False account.

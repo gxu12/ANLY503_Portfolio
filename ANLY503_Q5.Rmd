@@ -1,0 +1,105 @@
+---
+title: "ANLY503_Q5"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(visdat)
+library(hrbrthemes)
+library(naniar)
+library(Hmisc)
+library(skimr)
+library(lubridate)
+```
+
+# Question Five:
+
+
+## <span style="color:red">R Version:</span>
+
+```{r}
+transactions = read.csv('./data/transactions.csv')
+accounts = read.csv('./data/accounts_analytical.csv')
+```
+
+```{r}
+# to merge two datasets transaction and accounts with accounts that not have credit cards
+transaction_ab = transactions[transactions$type != 'debit',] %>% select(account_id,type)
+transaction_abc = transaction_ab %>% group_by(account_id,type) %>% distinct()
+
+cc <- merge(accounts, transaction_abc, by="account_id")
+
+# find the number of accounts that have credit transaction and do not have credit transactions
+dim_cc = dim(cc)
+
+dim_cc_null = dim(cc[is.na(cc$credit_cards),] %>% filter(credit_bank_transfer_other_txn_ct!=0 | credit_bank_transfer_other_txn_tot != 0 | credit_bank_transfer_other_avg_txn != 0 | credit_cash_other_txn_ct!= 0))
+```
+
+```{r}
+
+df <- data.frame(value = c(dim_cc[1],dim_cc_null[1]),
+                 Group = c("No Credit Card", "No Credit Card But Transaction")) %>%
+   # factor levels need to be the opposite order of the cumulative sum of the values
+   mutate(Group = factor(Group, levels = c("No Credit Card", "No Credit Card But Transaction")),
+          cumulative = cumsum(value),
+          midpoint = cumulative - value / 2,
+          label = paste0(round(value / sum(value) * 100, 1), "%"))
+
+# plot the pie chart
+ggplot(df,aes(x = 1, weight = value, fill = Group)) +
+   geom_bar(width = 1, position = "stack") +
+   coord_polar(theta = "y") +
+   geom_text(aes(x = 1.3, y = midpoint, label = label))+
+  theme(axis.line.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank(),
+        axis.line.y=element_blank(),
+          axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),)
+```
+
+so we can find there are about 54% accounts did not have a credit cards but have credit card transactions.
+
+
+## <span style="color:red">Python Version:</span>
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime as dt
+```
+
+### load the datasets
+
+```{python}
+transactions = pd.read_csv('./data/transactions.csv')
+accounts = pd.read_csv('./data/accounts_analytical.csv')
+```
+
+```{python}
+# merge the transaction and accounts
+transaction_credit = transactions[transactions['type']!='debit'][['account_id','type']]
+transaction_groupby = transaction_credit.groupby(['account_id','type']).max()
+merge_df = pd.merge(accounts, transaction_groupby, on="account_id")
+```
+
+```{python}
+# find the dimension of two types of accounts
+dim_credit = merge_df.shape[0]
+list_ = ['credit_bank_transfer_other_txn_ct','credit_bank_transfer_other_txn_tot','credit_bank_transfer_other_avg_txn','credit_cash_other_txn_ct']
+merge_df = merge_df.loc[pd.isnull(merge_df.credit_cards)]
+dim_credit_transaction = merge_df[(merge_df[list_[0]]!=0) | (merge_df[list_[1]]!=0) | (merge_df[list_[2]]!=0) | (merge_df[list_[3]]!=0)].shape[0]
+
+```
+
+```{python}
+df = pd.DataFrame({'Status': ['No Credit No Transaction', 'No Credit But Transaction'],
+                   'percent': [dim_credit,dim_credit_transaction]})
+df.set_index('Status',inplace=True)
+df.plot.pie(y='percent', title="The Percentage of acounts with no credit card but credit transactions", legend=False, \
+                   autopct='%1.1f%%', explode=(0, 0.1), \
+                   shadow=True, startangle=0)
+```

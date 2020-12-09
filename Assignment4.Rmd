@@ -1,0 +1,29 @@
+---
+title: "Assignment4"
+output: html_document
+---
+
+## Assignment 4:
+
+### Question:
+
+Data Wrangling Assignment
+
+### DataSet Introduction
+
+![Index](a4_1.png)
+![Index](a4_2.png)
+![Index](a4_3.png)
+![Index](a4_4.png)
+![Index](a4_5.png)
+![Index](a4_6.png)
+![Index](a4_7.png)
+
+### Analysis on the github web page
+
+![Index](a4.png)
+
+#### There is no visualization part
+#### the website for this homework is: https://github.com/anly503/anly503-fall2020-a4-gxu12
+
+
