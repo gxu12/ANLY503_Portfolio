@@ -1,31 +1,23 @@
 # ANLY503_Portfolio
 
-# Foobar
+# Introduction
 
-Foobar is a Python library for dealing with word pluralization.
+Welcome to this website!
 
-## Installation
+This website is build for showing my ANLY503 (Data Visualization Course) semester's homework and project
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+## Reminder
 
-```bash
-pip install foobar
-```
+Because the shape file is too large (more than 100MB), I am not able to git push it to this repository.
 
-## Usage
+So if you are interested, you can go to this website: *https://www2.census.gov/geo/tiger/TIGER2019/COUNTY/* to download the shape file
 
-```python
-import foobar
+And then, put unzip folder into both **data** folder and **_site/data** folder
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
+## Webpage Screenshot
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+<img src="21.png" width="425"/> <img src="21.png" width="425"/> 
 
-Please make sure to update tests as appropriate.
+## Show html in your browser
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+After cloning this repository, click **_site** folder, and then click **index.html** file
