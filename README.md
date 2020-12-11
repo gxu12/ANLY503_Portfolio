@@ -4,6 +4,8 @@
 
 Welcome to this website!
 
+You can take a look at this link: https://gxu12.github.io/ANLY503_Portfolio/
+
 This website is build for showing my ANLY503 (Data Visualization Course) semester's homework and project
 
 ## Reminder
