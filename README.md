@@ -16,7 +16,9 @@ And then, put unzip folder into both **data** folder and **_site/data** folder
 
 ## Webpage Screenshot
 
-<img src="21.png" width="425"/> <img src="21.png" width="425"/> 
+Index Page: <img src="screen1.png" width="425"/>
+
+About Page: <img src="screen2.png" width="425"/>
 
 ## Show html in your browser
 
