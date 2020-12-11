@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>a6.utf8</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="Assignment1.html">Homework 1</a>
+</li>
+<li>
+  <a href="Assignment2.html">Homework 2</a>
+</li>
+<li>
+  <a href="Assignment3.html">Homework 3</a>
+</li>
+<li>
+  <a href="Assignment4.html">Homework 4</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Homework 5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ANLY503_Q1.html">Question One</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q2.html">Question Two</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q3.html">Question Three</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q4.html">Question Four</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q5.html">Question Five</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="a6.html">Homework 6</a>
+</li>
+<li>
+  <a href="networks.html">Homework 7</a>
+</li>
+<li>
+  <a href="ANLY503_Final.html">Final Project</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+library(readxl)
+library(stringr)
+
+county = read_csv(&#39;./data/countypres_2000-2016.csv&#39;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   state = col_character(),
+##   state_po = col_character(),
+##   county = col_character(),
+##   FIPS = col_double(),
+##   office = col_character(),
+##   candidate = col_character(),
+##   party = col_character(),
+##   candidatevotes = col_double(),
+##   totalvotes = col_double(),
+##   version = col_double()
+## )</code></pre>
+<pre class="r"><code>unemployment = read_excel(&#39;./data/Unemployment.xls&#39;)</code></pre>
+<pre><code>## New names:
+## * `` -&gt; ...2
+## * `` -&gt; ...3
+## * `` -&gt; ...4
+## * `` -&gt; ...5
+## * `` -&gt; ...6
+## * ...</code></pre>
+<pre class="r"><code>unemployment = unemployment %&gt;% slice(7:n())</code></pre>
+<pre class="r"><code>colnames(unemployment) = unemployment[1,]
+unemployment = unemployment[-1,]</code></pre>
+<p>#Task One: Done in Python#</p>
+<p><strong>(i) proportion of the vote won by either Democartic or Republican candidate</strong></p>
+<div id="import-the-required-packages-and-dataset" class="section level3">
+<h3>Import the required packages and dataset</h3>
+<pre class="python"><code>import pandas as pd
+county = pd.read_csv(&#39;./data/countypres_2000-2016.csv&#39;)
+unemployment = pd.read_excel(&#39;./data/Unemployment.xls&#39;)</code></pre>
+<p>##<strong>to get the elections percent firstly</strong>##</p>
+</div>
+<div id="select-the-rows-in-unemployment-dataset" class="section level3">
+<h3>select the rows in unemployment dataset</h3>
+<pre class="python"><code>unemployment = unemployment[6:]
+unemployment.columns = unemployment.iloc[0]
+unemployment = unemployment.drop(unemployment.index[0])
+unemployment.reset_index(inplace=True)</code></pre>
+</div>
+<div id="use-groupby-to-get-the-vote-percent-in-each-year-for-each-party" class="section level3">
+<h3>use groupby to get the vote percent in each year for each party</h3>
+<pre class="python"><code>
+vote_percent_df = county.groupby([&#39;state_po&#39;,&#39;county&#39;,&#39;party&#39;,&#39;year&#39;]).apply(lambda g: g.candidatevotes/g.totalvotes)
+vote_percent_df = vote_percent_df.reset_index().drop(&#39;level_4&#39;,axis=1)
+vote_percent_df.rename(columns={ vote_percent_df.columns[-1]: &quot;vote_percent&quot; }, inplace = True)</code></pre>
+</div>
+<div id="filter-the-vote-percent-with-year-2018-and-party-type-democrat" class="section level3">
+<h3>filter the vote percent with year &gt;= 2018 and party type = democrat</h3>
+<pre class="python"><code>vote_percent_df = vote_percent_df.loc[(vote_percent_df[&#39;year&#39;] &gt;= 2008) &amp; (vote_percent_df[&#39;party&#39;] == &#39;democrat&#39;)]
+vote_percent_df.reset_index(drop=True,inplace=True)</code></pre>
+<p>##<strong>Then to get the unemployment rates</strong>## ### There are several rows needed to be moved like area_name = ‘United States’ etc###</p>
+<pre class="python"><code>unemployment = unemployment[unemployment[&#39;Rural_urban_continuum_code_2013&#39;].notna()]
+selected_column = [&#39;area_name&#39;,&#39;Unemployment_rate_2008&#39;,&#39;Unemployment_rate_2012&#39;,&#39;Unemployment_rate_2016&#39;]
+selected_unemployment = unemployment[selected_column].reset_index(drop=True)</code></pre>
+</div>
+<div id="split-area_name-into-state-and-county" class="section level3">
+<h3>split area_name into state and county</h3>
+<pre class="python"><code>selected_unemployment[[&#39;State&#39;,&#39;County&#39;]] = selected_unemployment[&#39;area_name&#39;].str.split(&#39;,&#39;,expand=True)
+selected_unemployment.drop(&#39;area_name&#39;,inplace=True,axis=1)
+selected_unemployment</code></pre>
+<pre><code>## 6    Unemployment_rate_2008 Unemployment_rate_2012  ...                State County
+## 0                       5.1                    6.9  ...       Autauga County     AL
+## 1                       4.6                    7.5  ...       Baldwin County     AL
+## 2                       8.8                   11.5  ...       Barbour County     AL
+## 3                       5.8                    8.5  ...          Bibb County     AL
+## 4                       4.7                    6.9  ...        Blount County     AL
+## ...                     ...                    ...  ...                  ...    ...
+## 3214                   13.2                     16  ...  Vega Baja Municipio     PR
+## 3215                   12.5                   12.9  ...    Vieques Municipio     PR
+## 3216                   13.8                   20.8  ...   Villalba Municipio     PR
+## 3217                   18.1                   23.3  ...    Yabucoa Municipio     PR
+## 3218                   13.1                   20.7  ...      Yauco Municipio     PR
+## 
+## [3219 rows x 5 columns]</code></pre>
+</div>
+<div id="rename-column-to-be-precisely" class="section level3">
+<h3>rename column to be precisely</h3>
+<pre class="python"><code>selected_unemployment.columns = [&#39;2008&#39;,&#39;2012&#39;,&#39;2016&#39;,&#39;State&#39;,&#39;County&#39;]
+selected_unemployment</code></pre>
+<pre><code>##       2008  2012  2016                State County
+## 0      5.1   6.9   5.1       Autauga County     AL
+## 1      4.6   7.5   5.3       Baldwin County     AL
+## 2      8.8  11.5   8.3       Barbour County     AL
+## 3      5.8   8.5   6.4          Bibb County     AL
+## 4      4.7   6.9   5.4        Blount County     AL
+## ...    ...   ...   ...                  ...    ...
+## 3214  13.2    16  13.9  Vega Baja Municipio     PR
+## 3215  12.5  12.9  10.6    Vieques Municipio     PR
+## 3216  13.8  20.8  20.2   Villalba Municipio     PR
+## 3217  18.1  23.3  16.9    Yabucoa Municipio     PR
+## 3218  13.1  20.7  18.8      Yauco Municipio     PR
+## 
+## [3219 rows x 5 columns]</code></pre>
+<p>#Task Two: Done in R:</p>
+<p>##<strong>(i) Proportion of vote won</strong></p>
+<pre class="r"><code>selected_county = county %&gt;% group_by(year,state_po,party,county) %&gt;% mutate(percent = candidatevotes/totalvotes) %&gt;% select(year,state_po,FIPS,county,party,percent)
+selected_county = na.omit(selected_county[selected_county$party == &#39;democrat&#39;,])
+selected_county$FIPS = str_pad(selected_county$FIPS,max(nchar(selected_county$FIPS)),side=&quot;left&quot;, pad=&quot;0&quot;)
+selected_county = selected_county %&gt;% filter(year &gt;= 2008)</code></pre>
+<pre class="r"><code>selected_column = c(&#39;FIPStxt&#39;,&#39;area_name&#39;,&#39;Unemployment_rate_2008&#39;,&#39;Unemployment_rate_2012&#39;,&#39;Unemployment_rate_2016&#39;)
+selected_unemployment = unemployment[selected_column]
+selected_unemployment = na.omit(selected_unemployment %&gt;% separate(area_name,c(&#39;County&#39;,&#39;State&#39;),&#39;,&#39;))</code></pre>
+<pre><code>## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 54 rows [1, 2,
+## 70, 103, 119, 195, 254, 319, 328, 332, 333, 334, 402, 562, 567, 612, 715, 808,
+## 908, 1014, ...].</code></pre>
+<pre class="r"><code>library(sf)</code></pre>
+<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
+<pre class="r"><code>library(tmap)
+library(tmaptools)</code></pre>
+<pre class="r"><code>usgeo &lt;- read_sf(&#39;./data/tl_2019_us_county-1/tl_2019_us_county.shp&#39;)</code></pre>
+</div>
+<div id="to-draw-the-texas-firstly-texas-fips-48" class="section level3">
+<h3>to draw the Texas firstly (Texas FIPS = 48)</h3>
+</div>
+<div id="draw-the-shape-firstly" class="section level3">
+<h3>draw the shape firstly</h3>
+<pre class="r"><code>texas_geo &lt;- filter(usgeo,STATEFP==&#39;48&#39;)
+qtm(texas_geo)</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-14-1.png" width="672" /> ### Then we can draw the percent of vote in texas###</p>
+<pre class="r"><code>texas_geo$NAME &lt;- as.character(texas_geo$NAME)
+texas_map &lt;- left_join(texas_geo, selected_county,by=c(&quot;GEOID&quot;=&quot;FIPS&quot;))
+tx_plot = tm_shape(texas_map) +
+tm_fill(&quot;percent&quot;, title=&quot;percent of votes for democrat in Texas&quot;, palette = &quot;PRGn&quot;) +
+tm_borders(alpha=.5) +
+  tm_style(&#39;classic&#39;) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+  tm_layout(main.title = &#39;Percent of votes for democrat in Texas&#39;,main.title.size=1,legend.outside = TRUE)
+tx_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="to-draw-the-calidornia-secondly-california-fips-06" class="section level3">
+<h3>to draw the Calidornia secondly (California FIPS = 06)</h3>
+</div>
+<div id="also-draw-the-shape-firstly" class="section level3">
+<h3>also draw the shape firstly</h3>
+<pre class="r"><code>ca_geo &lt;- filter(usgeo,STATEFP==&#39;06&#39;)
+qtm(ca_geo)</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="then-draw-the-percent-of-vote-in-ca" class="section level3">
+<h3>Then draw the percent of vote in CA</h3>
+<pre class="r"><code>ca_geo$NAME &lt;- as.character(ca_geo$NAME)
+ca_map &lt;- left_join(ca_geo, selected_county,by=c(&quot;GEOID&quot;=&quot;FIPS&quot;))
+ca_plot = tm_shape(ca_map) +
+tm_fill(&quot;percent&quot;, title=&quot;percent of votes for democrat in Calidornia&quot;, palette = &quot;PRGn&quot;) +
+tm_borders(alpha=.5) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+  tm_style(&#39;classic&#39;) +
+  tm_layout(main.title = &#39;Percent of votes for democrat in California&#39;,main.title.size=1,legend.outside = TRUE)
+ca_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="draw-pennsylvania-lastlyfips-42" class="section level3">
+<h3>draw Pennsylvania lastly(FIPS = 42)</h3>
+</div>
+<div id="to-draw-the-shape-of-penn" class="section level3">
+<h3>to draw the shape of Penn</h3>
+<pre class="r"><code>penn_geo &lt;- filter(usgeo,STATEFP==&#39;42&#39;)
+qtm(penn_geo)</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="then-draw-the-percent-of-vote-in-penn" class="section level3">
+<h3>Then draw the percent of vote in Penn</h3>
+<pre class="r"><code>penn_geo$NAME &lt;- as.character(penn_geo$NAME)
+penn_map &lt;- left_join(penn_geo, selected_county,by=c(&quot;GEOID&quot;=&quot;FIPS&quot;))
+penn_plot = tm_shape(penn_map) +
+tm_fill(&quot;percent&quot;, title=&quot;percent of votes for democrat in Pennsylvania&quot;, palette = &quot;PRGn&quot;) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+tm_borders(alpha=.5) +
+  tm_style(&#39;classic&#39;) +
+  tm_layout(main.title = &#39;Percent of votes for democrat in Pennsylvania&#39;,main.title.size=1,legend.outside = TRUE)
+penn_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>##<strong>Task 2: draw for Unemployment Rate</strong>##</p>
+</div>
+<div id="firstly-to-let-unemployment-rate-dataset-to-be-tidy-dataset" class="section level3">
+<h3>firstly, to let unemployment rate dataset to be tidy dataset</h3>
+<pre class="r"><code>library(tidyr)
+
+selected_unemployment = pivot_longer(selected_unemployment, cols=4:6, names_to = &quot;year&quot;, values_to = &quot;Unemployment Rate&quot;)
+
+selected_unemployment$year = substr(selected_unemployment$year,19,23)
+
+selected_unemployment$year = as.numeric(selected_unemployment$year)</code></pre>
+</div>
+<div id="unemployment-rate-in-texas" class="section level3">
+<h3>unemployment rate in Texas</h3>
+<pre class="r"><code>texas_map &lt;- left_join(texas_geo, selected_unemployment,by=c(&quot;GEOID&quot;=&quot;FIPStxt&quot;))
+texas_map$`Unemployment Rate` &lt;- as.numeric(texas_map$`Unemployment Rate`)
+tx_un_plot = tm_shape(texas_map) +
+tm_fill(&#39;Unemployment Rate&#39;, title=&quot;Unemployment Rate in Texas(%)&quot;, palette = &quot;PRGn&quot;) +
+tm_borders(alpha=.5) +
+  tm_style(&#39;classic&#39;) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+  tm_layout(main.title = &#39;Unemployment rate in Texas&#39;,main.title.size=1,legend.outside = TRUE)
+tx_un_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="unemployment-rate-in-ca" class="section level3">
+<h3>Unemployment rate in CA</h3>
+<pre class="r"><code>ca_map &lt;- left_join(ca_geo, selected_unemployment,by=c(&quot;GEOID&quot;=&quot;FIPStxt&quot;))
+ca_map$`Unemployment Rate` &lt;- as.numeric(ca_map$`Unemployment Rate`)
+ca_un_plot = tm_shape(ca_map) +
+tm_fill(&#39;Unemployment Rate&#39;, title=&quot;Unemployment Rate in California(%)&quot;, palette = &quot;PRGn&quot;) +
+tm_borders(alpha=.5) +
+  tm_style(&#39;classic&#39;) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+  tm_layout(main.title = &#39;Unemployment rate in California&#39;,main.title.size=1,legend.outside = TRUE)
+ca_un_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="unemployment-in-penn" class="section level3">
+<h3>Unemployment in Penn</h3>
+<pre class="r"><code>penn_geo$NAME &lt;- as.character(penn_geo$NAME)
+penn_map &lt;- left_join(penn_geo, selected_unemployment,by=c(&quot;GEOID&quot;=&quot;FIPStxt&quot;))
+penn_map$`Unemployment Rate` &lt;- as.numeric(penn_map$`Unemployment Rate`)
+penn_un_plot = tm_shape(penn_map) +
+tm_fill(&quot;Unemployment Rate&quot;, title=&quot;Unemployment Rate in Pennsylvania(%)&quot;, palette = &quot;PRGn&quot;) +
+  tm_facets(by=c(&#39;year&#39;),ncol=1) +
+tm_borders(alpha=.5) +
+  tm_style(&#39;classic&#39;) +
+  tm_layout(main.title = &#39;Unemployment Rate in Pennsylvania&#39;,main.title.size=1,legend.outside = TRUE)
+penn_un_plot</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="finally-combine-plots" class="section level2">
+<h2>Finally, combine plots</h2>
+<div id="for-pennsylvania" class="section level3">
+<h3>For Pennsylvania</h3>
+<pre class="r"><code>current.mode &lt;- tmap_mode(&#39;plot&#39;)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+<pre class="r"><code>tmap_arrange(penn_plot,penn_un_plot,widths = c(1,1))</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre class="r"><code>tmap_mode(current.mode)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+</div>
+<div id="for-texas" class="section level3">
+<h3>For Texas</h3>
+<pre class="r"><code>current.mode &lt;- tmap_mode(&#39;plot&#39;)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+<pre class="r"><code>tmap_arrange(tx_plot,tx_un_plot,widths = c(1,1))</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>tmap_mode(current.mode)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+</div>
+<div id="for-california" class="section level3">
+<h3>For California</h3>
+<pre class="r"><code>current.mode &lt;- tmap_mode(&#39;plot&#39;)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+<pre class="r"><code>tmap_arrange(ca_plot,ca_un_plot,widths = c(1,1))</code></pre>
+<p><img src="a6_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>tmap_mode(current.mode)</code></pre>
+<pre><code>## tmap mode set to plotting</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

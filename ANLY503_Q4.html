@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>ANLY503_Q4</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="Assignment1.html">Homework 1</a>
+</li>
+<li>
+  <a href="Assignment2.html">Homework 2</a>
+</li>
+<li>
+  <a href="Assignment3.html">Homework 3</a>
+</li>
+<li>
+  <a href="Assignment4.html">Homework 4</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Homework 5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ANLY503_Q1.html">Question One</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q2.html">Question Two</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q3.html">Question Three</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q4.html">Question Four</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q5.html">Question Five</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="a6.html">Homework 6</a>
+</li>
+<li>
+  <a href="networks.html">Homework 7</a>
+</li>
+<li>
+  <a href="ANLY503_Final.html">Final Project</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">ANLY503_Q4</h1>
+
+</div>
+
+
+<div id="question-four" class="section level1">
+<h1>Question Four:</h1>
+<div id="r-version" class="section level2">
+<h2><span style="color:red">R Version:</span></h2>
+<pre class="r"><code>transactions = read.csv(&#39;./data/transactions.csv&#39;)
+accounts = read.csv(&#39;./data/accounts_analytical.csv&#39;)</code></pre>
+<div id="find-the-account-id-has-the-highest-transaction-amount" class="section level3">
+<h3>Find the account id has the highest transaction amount</h3>
+<pre class="r"><code># filter the dataset to find the highest transaction amount
+account_id = transactions %&gt;% group_by(account_id) %&gt;% mutate(cnt = n()) %&gt;% ungroup %&gt;% filter(cnt == max(cnt))
+#account_id</code></pre>
+<p>##<strong>Plot One: Smooth Line by year</strong></p>
+<pre class="r"><code># plot the amount by smooth line
+account_id$date = ymd(account_id$date)
+account_id %&gt;% group_by(&#39;date&#39;) %&gt;% 
+ggplot(aes(x=date,y=amount,group=type,color=type))+
+  geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>##<strong>Plot Two:Different Type of transaction in different year</strong></p>
+<pre class="r"><code># to plot the time series of transaction in credit and debit
+account_id[&#39;year&#39;] = year(account_id$date)
+account_id[&#39;month&#39;] = month(account_id$date)
+account_id[&#39;month&#39;] = factor(account_id$month, levels = unique(account_id$month))
+ggplot(account_id,aes(x=month,y=amount,group=type,color=type)) +
+  facet_grid(year~.) +
+  geom_line() + 
+  ggtitle(&#39;The Time Series Plot of Type of Transactions in each year&#39;)</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+</div>
+<div id="plot-three-time-series-by-method" class="section level2">
+<h2><strong>Plot Three: Time Series by Method</strong></h2>
+<pre class="r"><code>account_id$method[grepl(&quot;^ *$&quot;,account_id$method)] &lt;- NA
+ggplot(account_id,aes(x=month,y=amount,group=method,color=method)) +
+  facet_grid(year~.,space = &quot;free&quot;) +
+  geom_line(na.rm=TRUE) + 
+  ggtitle(&#39;The Time Series Plot of Method of Transactions in each year&#39;)</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="plot-four-the-time-series-plot-of-category" class="section level2">
+<h2><strong>Plot Four: The Time Series Plot of Category</strong></h2>
+<pre class="r"><code>account_id$category[account_id$category == &quot;&quot; ] &lt;- &#39;Unknown&#39;
+ggplot(account_id,aes(x=month,y=amount,group=category,color=category)) +
+  facet_grid(year~.,space = &quot;free&quot;) +
+  geom_line() + 
+  theme(text = element_text(size = 8), element_line(size = 0.6))</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>  ggtitle(&#39;The Time Series Plot of Method of Transactions in each year&#39;)</code></pre>
+<pre><code>## $title
+## [1] &quot;The Time Series Plot of Method of Transactions in each year&quot;
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;labels&quot;</code></pre>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion:</h2>
+<p>For the last plot, we can find the household payment, insurance payment, loan payment, intest credit, and statement charge all have frequency, and the transaction amount is constant.</p>
+<p>for the first and the second plot, when time is close to the end of month, the amount will increase.</p>
+</div>
+<div id="python-version" class="section level2">
+<h2><span style="color:red">Python Version:</span></h2>
+<pre class="python"><code>import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime as dt</code></pre>
+<div id="load-the-datasets" class="section level3">
+<h3>load the datasets</h3>
+<pre class="python"><code>transactions = pd.read_csv(&#39;./data/transactions.csv&#39;)</code></pre>
+<pre><code>## sys:1: DtypeWarning: Columns (6) have mixed types.Specify dtype option on import or set low_memory=False.</code></pre>
+<pre class="python"><code>accounts = pd.read_csv(&#39;./data/accounts_analytical.csv&#39;)</code></pre>
+<pre class="python"><code># group the dataset by account_id
+account_id = transactions.groupby(&#39;account_id&#39;).count().reset_index()[[&#39;account_id&#39;,&#39;id&#39;]].sort_values(ascending=False,by=&#39;id&#39;)[&#39;account_id&#39;].reset_index()
+account_df = transactions[transactions[&#39;account_id&#39;] == account_id[&#39;account_id&#39;][0]]
+
+#account_df</code></pre>
+</div>
+</div>
+<div id="plot-one-amount-versus-type" class="section level2">
+<h2><strong>Plot One: Amount versus Type</strong></h2>
+<pre class="python"><code># find the trend in each year
+# parse the date
+account_df[&#39;year&#39;] = pd.to_datetime(account_df[&#39;date&#39;]).dt.year</code></pre>
+<pre><code>## /Users/xuguiming/Library/r-miniconda/envs/r-reticulate/bin/python:1: SettingWithCopyWarning: 
+## A value is trying to be set on a copy of a slice from a DataFrame.
+## Try using .loc[row_indexer,col_indexer] = value instead
+## 
+## See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy</code></pre>
+<pre class="python"><code>account_df[&#39;month&#39;] = pd.to_datetime(account_df[&#39;date&#39;]).dt.month
+
+f,ax = plt.subplots(2,1,figsize=(12,12))
+sns.lineplot(x=&#39;month&#39;,y=&#39;amount&#39;,hue=&#39;year&#39;,data=account_df[account_df[&#39;type&#39;]==&#39;credit&#39;],ci=None,ax=ax[0],palette=&#39;Set1&#39;)
+ax[0].set_title(&#39;The trend of amount from 1993 to 1998 for credit&#39;)
+
+sns.lineplot(x=&#39;month&#39;,y=&#39;amount&#39;,hue=&#39;year&#39;,data=account_df[account_df[&#39;type&#39;]==&#39;debit&#39;],ci=None,ax=ax[1],palette=&#39;Set1&#39;)
+ax[1].set_title(&#39;The trend of amount from 1993 to 1998 for debit&#39;)</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
+</div>
+<div id="plot-two-amount-versus-method" class="section level2">
+<h2><strong>Plot Two: Amount versus Method</strong></h2>
+<pre class="python"><code>f,ax = plt.subplots(2,1,figsize=(12,10))
+sns.lineplot(x=&#39;month&#39;,y=&#39;amount&#39;,hue=&#39;year&#39;,data=account_df[account_df[&#39;method&#39;]==&#39;bank transfer&#39;],ci=None,ax=ax[0],palette=&#39;Set1&#39;)
+ax[0].set_title(&#39;The trend of amount from 1993 to 1998 for Bank Transfer&#39;)
+
+sns.lineplot(x=&#39;month&#39;,y=&#39;amount&#39;,hue=&#39;year&#39;,data=account_df[account_df[&#39;method&#39;]==&#39;cash&#39;],ci=None,ax=ax[1],palette=&#39;Set1&#39;)
+ax[1].set_title(&#39;The trend of amount from 1993 to 1998 for Cash&#39;)</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
+</div>
+<div id="plot-three-amount-versus-category" class="section level2">
+<h2><strong>Plot Three: Amount versus Category</strong></h2>
+<pre class="python"><code>f,ax = plt.subplots(12,5)
+account_df[&#39;category&#39;].fillna(&#39;Unknown&#39;,inplace=True)</code></pre>
+<pre><code>## /Users/xuguiming/Library/r-miniconda/envs/r-reticulate/lib/python3.6/site-packages/pandas/core/series.py:4523: SettingWithCopyWarning: 
+## A value is trying to be set on a copy of a slice from a DataFrame
+## 
+## See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+##   downcast=downcast,</code></pre>
+<pre class="python"><code>sns.relplot(x=&#39;month&#39;,y=&#39;amount&#39;,col=&#39;year&#39;,hue=&#39;category&#39;,data=account_df,size=&#39;category&#39;,ci=None,kind=&#39;line&#39;)</code></pre>
+<pre><code>## &lt;seaborn.axisgrid.FacetGrid object at 0x7f8e893aba90&gt;</code></pre>
+<pre class="python"><code>plt.title(&#39;The Transaction amount versus Category&#39;)</code></pre>
+<p><img src="ANLY503_Q4_files/figure-html/unnamed-chunk-12-1.png" width="3060" /></p>
+</div>
+<div id="conclusion-1" class="section level2">
+<h2>Conclusion:</h2>
+<p>The Conclusion is the same as R version.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
