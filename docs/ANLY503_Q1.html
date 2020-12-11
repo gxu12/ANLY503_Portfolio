@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>ANLY503_Q1</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="Assignment1.html">Homework 1</a>
+</li>
+<li>
+  <a href="Assignment2.html">Homework 2</a>
+</li>
+<li>
+  <a href="Assignment3.html">Homework 3</a>
+</li>
+<li>
+  <a href="Assignment4.html">Homework 4</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Homework 5
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="ANLY503_Q1.html">Question One</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q2.html">Question Two</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q3.html">Question Three</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q4.html">Question Four</a>
+    </li>
+    <li>
+      <a href="ANLY503_Q5.html">Question Five</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="a6.html">Homework 6</a>
+</li>
+<li>
+  <a href="networks.html">Homework 7</a>
+</li>
+<li>
+  <a href="ANLY503_Final.html">Final Project</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">ANLY503_Q1</h1>
+
+</div>
+
+
+<div id="question-one" class="section level1">
+<h1>Question One:</h1>
+<div id="r-version" class="section level2">
+<h2><span style="color:red">R Version:</span></h2>
+<p>we need to load the file firstly</p>
+<pre class="r"><code># load the dataset
+transactions = read.csv(&#39;./data/transactions.csv&#39;)
+accounts = read.csv(&#39;./data/accounts_analytical.csv&#39;)</code></pre>
+<p>and then take a glance for these datasets</p>
+<pre class="r"><code># to find descriptive information for transactions
+Hmisc::describe(transactions)</code></pre>
+<pre><code>## transactions 
+## 
+##  10  Variables      1056320  Observations
+## --------------------------------------------------------------------------------
+## id 
+##        n  missing distinct     Info     Mean      Gmd      .05      .10 
+##  1056320        0  1056320        1  1335311  1293046    86297   168953 
+##      .25      .50      .75      .90      .95 
+##   430263   858506  2060979  3562913  3617377 
+## 
+## lowest :       1       5       6       7       8
+## highest: 3682983 3682984 3682985 3682986 3682987
+## --------------------------------------------------------------------------------
+## account_id 
+##        n  missing distinct     Info     Mean      Gmd      .05      .10 
+##  1056320        0     4500        1     2937     2537      238      470 
+##      .25      .50      .75      .90      .95 
+##     1204     2434     3660     6636     9041 
+## 
+## lowest :     1     2     3     4     5, highest: 11333 11349 11359 11362 11382
+## --------------------------------------------------------------------------------
+## date 
+##        n  missing distinct 
+##  1056320        0     2191 
+## 
+## lowest : 1993-01-01 1993-01-02 1993-01-03 1993-01-04 1993-01-05
+## highest: 1998-12-27 1998-12-28 1998-12-29 1998-12-30 1998-12-31
+## --------------------------------------------------------------------------------
+## type 
+##        n  missing distinct 
+##  1056320        0        2 
+##                         
+## Value      credit  debit
+## Frequency  405083 651237
+## Proportion  0.383  0.617
+## --------------------------------------------------------------------------------
+## amount 
+##        n  missing distinct     Info     Mean      Gmd      .05      .10 
+##  1056320        0    35890    0.997     5924     8326       15       15 
+##      .25      .50      .75      .90      .95 
+##      136     2100     6800    18400    25700 
+## 
+## lowest :     0     1     2     3     4, highest: 81900 85800 86400 87300 87400
+## --------------------------------------------------------------------------------
+## balance 
+##        n  missing distinct     Info     Mean      Gmd      .05      .10 
+##  1056320        0   111042        1    38518    23652    13635    16291 
+##      .25      .50      .75      .90      .95 
+##    22403    33143    49604    68866    82673 
+## 
+## lowest : -41126 -40938 -40817 -40581 -40381, highest: 192663 193910 194119 196107 209637
+## --------------------------------------------------------------------------------
+## bank 
+##        n  missing distinct 
+##   273508   782812       13 
+## 
+## lowest : AB CD EF GH IJ, highest: QR ST UV WX YZ
+##                                                                             
+## Value         AB    CD    EF    GH    IJ    KL    MN    OP    QR    ST    UV
+## Frequency  21720 19597 21293 21499 20525 21234 19623 21094 22285 21711 21167
+## Proportion 0.079 0.072 0.078 0.079 0.075 0.078 0.072 0.077 0.081 0.079 0.077
+##                       
+## Value         WX    YZ
+## Frequency  20178 21582
+## Proportion 0.074 0.079
+## --------------------------------------------------------------------------------
+## account 
+##        n  missing distinct     Info     Mean      Gmd      .05      .10 
+##   295389   760931     7665        1 45670919 35374273        0  2758771 
+##      .25      .50      .75      .90      .95 
+## 17828584 45750951 72013407 88619136 94227504 
+## 
+## lowest :        0      399     1460    15318    18376
+## highest: 99959164 99959903 99964111 99985640 99994199
+## --------------------------------------------------------------------------------
+## method 
+##        n  missing distinct 
+##   873206   183114        3 
+##                                                     
+## Value      bank transfer          cash   credit card
+## Frequency         273509        591661          8036
+## Proportion         0.313         0.678         0.009
+## --------------------------------------------------------------------------------
+## category 
+##        n  missing distinct 
+##   521006   535314        7 
+## 
+## lowest : household payment       insurance payment       interest credit         loan payment            negative balance charge
+## highest: interest credit         loan payment            negative balance charge pension benefit         statement charge       
+## 
+## household payment (118065, 0.227), insurance payment (18500, 0.036), interest
+## credit (183114, 0.351), loan payment (13580, 0.026), negative balance charge
+## (1577, 0.003), pension benefit (30338, 0.058), statement charge (155832, 0.299)
+## --------------------------------------------------------------------------------</code></pre>
+<pre class="r"><code>glimpse(accounts)</code></pre>
+<pre><code>## Rows: 4,500
+## Columns: 64
+## $ account_id                                    &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8,…
+## $ acct_creation_date                            &lt;chr&gt; &quot;1995-03-24&quot;, &quot;1993-02-…
+## $ statement_frequency                           &lt;chr&gt; &quot;monthly&quot;, &quot;monthly&quot;, &quot;…
+## $ account_district                              &lt;chr&gt; &quot;Pisek&quot;, &quot;Hl.m. Praha&quot;,…
+## $ num_customers                                 &lt;int&gt; 1, 2, 2, 1, 1, 1, 1, 2,…
+## $ credit_cards                                  &lt;int&gt; 1, 2, 2, NA, 1, 1, 1, 2…
+## $ loan_date                                     &lt;chr&gt; &quot;&quot;, &quot;1994-01-05&quot;, &quot;&quot;, &quot;…
+## $ loan_amount                                   &lt;int&gt; NA, 80952, NA, NA, NA, …
+## $ loan_payment                                  &lt;int&gt; NA, 3373, NA, NA, NA, N…
+## $ loan_term                                     &lt;int&gt; NA, 24, NA, NA, NA, NA,…
+## $ loan_status                                   &lt;chr&gt; &quot;&quot;, &quot;expired&quot;, &quot;&quot;, &quot;&quot;, …
+## $ loan_default                                  &lt;lgl&gt; NA, FALSE, NA, NA, NA, …
+## $ max_withdrawal                                &lt;int&gt; 7500, 42000, 7400, 5250…
+## $ min_withdrawal                                &lt;int&gt; 15, 15, 15, 15, 15, 15,…
+## $ max_balance                                   &lt;int&gt; 30415, 69302, 53447, 34…
+## $ min_balance                                   &lt;int&gt; 1000, 1100, 1000, 800, …
+## $ credit_bank_transfer_other_txn_ct             &lt;int&gt; 45, 70, 0, 0, 0, 0, 0, …
+## $ credit_bank_transfer_other_txn_tot            &lt;int&gt; 165555, 1537936, 0, 0, …
+## $ credit_bank_transfer_other_avg_txn            &lt;dbl&gt; 3679.00, 21970.51, 0.00…
+## $ credit_cash_other_txn_ct                      &lt;int&gt; 12, 12, 28, 1, 1, 1, 26…
+## $ credit_cash_other_txn_tot                     &lt;int&gt; 25700, 48400, 170989, 8…
+## $ credit_cash_other_avg_txn                     &lt;dbl&gt; 2141.667, 4033.333, 610…
+## $ credit_other_interest_credit_txn_ct           &lt;int&gt; 45, 70, 18, 30, 15, 47,…
+## $ credit_other_interest_credit_txn_tot          &lt;int&gt; 3067, 10719, 2073, 2747…
+## $ credit_other_interest_credit_avg_txn          &lt;dbl&gt; 68.15556, 153.12857, 11…
+## $ debit_bank_transfer_household_payment_txn_ct  &lt;int&gt; 40, 65, 13, 29, 14, 47,…
+## $ debit_bank_transfer_household_payment_txn_tot &lt;int&gt; 98080, 472290, 14755, 6…
+## $ debit_bank_transfer_household_payment_avg_txn &lt;int&gt; 2452, 7266, 1135, 2078,…
+## $ debit_cash_statement_charge_txn_ct            &lt;int&gt; 40, 65, 13, 29, 14, 46,…
+## $ debit_cash_statement_charge_txn_tot           &lt;int&gt; 600, 975, 195, 435, 210…
+## $ debit_cash_statement_charge_avg_txn           &lt;int&gt; 15, 15, 15, 15, 15, 15,…
+## $ debit_cash_other_txn_ct                       &lt;int&gt; 57, 172, 19, 33, 21, 54…
+## $ debit_cash_other_txn_tot                      &lt;int&gt; 82190, 1000242, 56760, …
+## $ debit_cash_other_avg_txn                      &lt;dbl&gt; 1441.930, 5815.360, 298…
+## $ debit_bank_transfer_loan_payment_txn_ct       &lt;int&gt; 0, 24, 0, 0, 0, 0, 0, 0…
+## $ debit_bank_transfer_loan_payment_txn_tot      &lt;int&gt; 0, 80952, 0, 0, 0, 0, 0…
+## $ debit_bank_transfer_loan_payment_avg_txn      &lt;dbl&gt; 0, 3373, 0, 0, 0, 0, 0,…
+## $ debit_bank_transfer_insurance_payment_txn_ct  &lt;int&gt; 0, 0, 13, 0, 0, 0, 0, 0…
+## $ debit_bank_transfer_insurance_payment_txn_tot &lt;int&gt; 0, 0, 46007, 0, 0, 0, 0…
+## $ debit_bank_transfer_insurance_payment_avg_txn &lt;int&gt; 0, 0, 3539, 0, 0, 0, 0,…
+## $ debit_bank_transfer_other_txn_ct              &lt;int&gt; 0, 0, 13, 30, 0, 0, 0, …
+## $ debit_bank_transfer_other_txn_tot             &lt;int&gt; 0, 0, 4251, 38550, 0, 0…
+## $ debit_bank_transfer_other_avg_txn             &lt;dbl&gt; 0, 0, 327, 1285, 0, 0, …
+## $ credit_bank_transfer_pension_benefit_txn_ct   &lt;int&gt; 0, 0, 0, 34, 19, 51, 0,…
+## $ credit_bank_transfer_pension_benefit_txn_tot  &lt;int&gt; 0, 0, 0, 188802, 95323,…
+## $ credit_bank_transfer_pension_benefit_avg_txn  &lt;int&gt; 0, 0, 0, 5553, 5017, 66…
+## $ debit_credit_card_other_txn_ct                &lt;int&gt; 0, 0, 0, 0, 0, 0, 1, 0,…
+## $ debit_credit_card_other_txn_tot               &lt;int&gt; 0, 0, 0, 0, 0, 0, 5900,…
+## $ debit_credit_card_other_avg_txn               &lt;dbl&gt; 0.000, 0.000, 0.000, 0.…
+## $ debit_cash_household_payment_txn_ct           &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_household_payment_txn_tot          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_household_payment_avg_txn          &lt;dbl&gt; 0.00, 0.00, 0.00, 0.00,…
+## $ debit_cash_negative_balance_charge_txn_ct     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_negative_balance_charge_txn_tot    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_negative_balance_charge_avg_txn    &lt;dbl&gt; 0.00, 0.00, 0.00, 0.00,…
+## $ debit_cash_insurance_payment_txn_ct           &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_insurance_payment_txn_tot          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ debit_cash_insurance_payment_avg_txn          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ pmt_order_ct                                  &lt;int&gt; 1, 2, 3, 2, 1, 1, 1, 2,…
+## $ pmt_order_avg_amt                             &lt;dbl&gt; 2452.00, 5319.35, 1667.…
+## $ owner_client_id                               &lt;int&gt; 1, 2, 4, 6, 7, 8, 9, 10…
+## $ gender                                        &lt;chr&gt; &quot;F&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;…
+## $ birth_date                                    &lt;chr&gt; &quot;1970-12-13&quot;, &quot;1945-02-…
+## $ owner_district                                &lt;chr&gt; &quot;Pisek&quot;, &quot;Hl.m. Praha&quot;,…</code></pre>
+<p>because there are too much variables with long name</p>
+<p>I make a subset dataset for columns that have null values</p>
+<pre class="r"><code># do analysis for null values
+accounts_with_null_columns = accounts %&gt;% select_if(funs(sum(as.numeric(is.na(.)), na.rm=TRUE) != 0))
+
+theme_set(theme_ipsum())
+vis_dat(accounts_with_null_columns,warn_large_data=FALSE)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>we can find there are lots of NULL values in columns related with loan</p>
+<pre class="r"><code>gg_miss_var(transactions)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>there are only one column have null values that is ‘account’</p>
+</div>
+<div id="question-1a-whether-an-account-has-a-credit-card-or-not" class="section level2">
+<h2>Question 1A: Whether an account has a credit card or not</h2>
+<pre class="r"><code># filter the dataset to find the accounts with or without credit cards
+accounts$credit_cards[is.na(accounts$credit_cards)] &lt;- 0
+
+p &lt;- accounts %&gt;%
+  ggplot( aes(x=credit_cards)) +
+    geom_histogram( binwidth=1, fill=&quot;#69b3a2&quot;, color=&quot;#e9ecef&quot;, alpha=0.9) +
+    ggtitle(&quot;The count plot of credit cards&quot;) +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=15)
+    )
+
+p</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>there are 3775 accounts do not have a credit card</p>
+</div>
+<div id="question-1b-whether-an-account-has-a-loan-or-not" class="section level2">
+<h2>Question 1B: Whether an account has a loan or not</h2>
+<pre class="r"><code># find whether account has loan or not 
+accounts$loan_status[accounts$loan_status == &#39;&#39;] &lt;- &#39;Unknown&#39;
+
+ggplot(accounts,aes(loan_status,fill=loan_status)) +
+  geom_bar() +
+  labs(x=NULL,y=&#39;Count&#39;) +
+  geom_text(stat=&#39;count&#39;,aes(label = after_stat(count),vjust=-1,size=3.5)) +
+  ggtitle(&#39;The count plot of loan status&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>we can there are lots of unknow values, and there are 448 loan is active, and 234 loan is expired</p>
+</div>
+<div id="question-1c-the-average-balance-for-the-account" class="section level2">
+<h2>Question 1C: The average balance for the account</h2>
+<pre class="r"><code># calculate the average balance
+accounts$mean_balance = (accounts$max_balance + accounts$min_balance) / 2
+
+# to show the distribution of average balance for accounts
+average_balance &lt;- ggplot(accounts,aes(x=mean_balance)) +
+  geom_histogram(aes(y=..density..),
+                 binwidth = 10000,
+                  colour = &#39;black&#39;, fill = &#39;white&#39;) +
+  geom_density(alpha=0.2,fill=&#39;blue&#39;) +
+  ggtitle(&#39;The distribution of average balance&#39;)
+
+average_balance</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="question-1d" class="section level2">
+<h2>Question 1D:</h2>
+<pre class="r"><code>average_balance + facet_wrap(~credit_cards+loan_status,nrow=4,
+                             labeller = labeller(
+                               credit_cards = c(&#39;0&#39; = &quot;0 Credit Card&quot;,
+                                                &#39;1&#39; = &quot;1 Credit Card&quot;,
+                                                &#39;2&#39; = &quot;2 Credit Cards&quot;)
+                             )) +
+  ggtitle(&#39;The distribution of average balance under different number of credit cards&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>there are no obvious change of distribution of average balance by the number of credit cards</p>
+<pre class="r"><code># to make a heatmap to find the count under different credit_cards and loan_status
+counts = count(accounts,loan_status,credit_cards) 
+
+ggplot(counts,aes(x=loan_status,y=credit_cards)) +
+  geom_tile(aes(fill=n)) +
+  geom_text(aes(label=n),stat=&#39;identity&#39;) + 
+  scale_fill_continuous(low=&quot;grey&quot;, high=&quot;pink&quot;, limits=c(0,4000))+
+  ggtitle(&#39;number of accounts type&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>after plotting this matrix, we can find most accounts do not have credit_cards and have Unknow loan status</p>
+</div>
+<div id="python-version" class="section level2">
+<h2><span style="color:red">Python Version:</span></h2>
+<pre class="r"><code>library(reticulate)</code></pre>
+<div id="import-the-required-packages" class="section level3">
+<h3>import the required packages</h3>
+<pre class="python"><code># loan packages
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns</code></pre>
+</div>
+<div id="load-the-datasets" class="section level3">
+<h3>load the datasets</h3>
+<pre class="python"><code>transactions = pd.read_csv(&#39;./data/transactions.csv&#39;)</code></pre>
+<pre><code>## sys:1: DtypeWarning: Columns (6) have mixed types.Specify dtype option on import or set low_memory=False.</code></pre>
+<pre class="python"><code>accounts = pd.read_csv(&#39;./data/accounts_analytical.csv&#39;)</code></pre>
+</div>
+<div id="information-for-transactions" class="section level3">
+<h3>Information for transactions</h3>
+<pre class="python"><code># take some descriptive information
+transactions.describe()</code></pre>
+<pre><code>##                  id    account_id        amount       balance       account
+## count  1.056320e+06  1.056320e+06  1.056320e+06  1.056320e+06  2.953890e+05
+## mean   1.335311e+06  2.936867e+03  5.924211e+03  3.851838e+04  4.567092e+07
+## std    1.227487e+06  2.477345e+03  9.522698e+03  2.211787e+04  3.066340e+07
+## min    1.000000e+00  1.000000e+00  0.000000e+00 -4.112600e+04  0.000000e+00
+## 25%    4.302628e+05  1.204000e+03  1.360000e+02  2.240300e+04  1.782858e+07
+## 50%    8.585065e+05  2.434000e+03  2.100000e+03  3.314300e+04  4.575095e+07
+## 75%    2.060979e+06  3.660000e+03  6.800000e+03  4.960400e+04  7.201341e+07
+## max    3.682987e+06  1.138200e+04  8.740000e+04  2.096370e+05  9.999420e+07</code></pre>
+<pre class="python"><code>transactions.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 1056320 entries, 0 to 1056319
+## Data columns (total 10 columns):
+##  #   Column      Non-Null Count    Dtype  
+## ---  ------      --------------    -----  
+##  0   id          1056320 non-null  int64  
+##  1   account_id  1056320 non-null  int64  
+##  2   date        1056320 non-null  object 
+##  3   type        1056320 non-null  object 
+##  4   amount      1056320 non-null  int64  
+##  5   balance     1056320 non-null  int64  
+##  6   bank        273508 non-null   object 
+##  7   account     295389 non-null   float64
+##  8   method      873206 non-null   object 
+##  9   category    521006 non-null   object 
+## dtypes: float64(1), int64(4), object(5)
+## memory usage: 80.6+ MB</code></pre>
+</div>
+<div id="infotmation-for-accounts" class="section level3">
+<h3>Infotmation for accounts</h3>
+<pre class="python"><code>accounts.describe()</code></pre>
+<pre><code>##          account_id  num_customers  ...  pmt_order_avg_amt  owner_client_id
+## count   4500.000000    4500.000000  ...        3758.000000      4091.000000
+## mean    2786.067556       1.193111  ...        3710.554169      3365.340504
+## std     2313.811984       0.394783  ...        2343.249569      2811.801617
+## min        1.000000       1.000000  ...         312.000000         1.000000
+## 25%     1182.750000       1.000000  ...        2037.750000      1442.000000
+## 50%     2368.000000       1.000000  ...        3085.500000      2852.000000
+## 75%     3552.250000       1.000000  ...        4839.937500      4273.500000
+## max    11382.000000       2.000000  ...       14811.000000     13998.000000
+## 
+## [8 rows x 55 columns]</code></pre>
+<pre class="python"><code>accounts.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 4500 entries, 0 to 4499
+## Data columns (total 64 columns):
+##  #   Column                                         Non-Null Count  Dtype  
+## ---  ------                                         --------------  -----  
+##  0   account_id                                     4500 non-null   int64  
+##  1   acct_creation_date                             4500 non-null   object 
+##  2   statement_frequency                            4500 non-null   object 
+##  3   account_district                               4500 non-null   object 
+##  4   num_customers                                  4500 non-null   int64  
+##  5   credit_cards                                   725 non-null    float64
+##  6   loan_date                                      682 non-null    object 
+##  7   loan_amount                                    682 non-null    float64
+##  8   loan_payment                                   682 non-null    float64
+##  9   loan_term                                      682 non-null    float64
+##  10  loan_status                                    682 non-null    object 
+##  11  loan_default                                   682 non-null    object 
+##  12  max_withdrawal                                 4500 non-null   int64  
+##  13  min_withdrawal                                 4500 non-null   int64  
+##  14  max_balance                                    4500 non-null   int64  
+##  15  min_balance                                    4500 non-null   int64  
+##  16  credit_bank_transfer_other_txn_ct              4500 non-null   int64  
+##  17  credit_bank_transfer_other_txn_tot             4500 non-null   int64  
+##  18  credit_bank_transfer_other_avg_txn             4500 non-null   float64
+##  19  credit_cash_other_txn_ct                       4500 non-null   int64  
+##  20  credit_cash_other_txn_tot                      4500 non-null   int64  
+##  21  credit_cash_other_avg_txn                      4500 non-null   float64
+##  22  credit_other_interest_credit_txn_ct            4500 non-null   int64  
+##  23  credit_other_interest_credit_txn_tot           4500 non-null   int64  
+##  24  credit_other_interest_credit_avg_txn           4500 non-null   float64
+##  25  debit_bank_transfer_household_payment_txn_ct   4500 non-null   int64  
+##  26  debit_bank_transfer_household_payment_txn_tot  4500 non-null   int64  
+##  27  debit_bank_transfer_household_payment_avg_txn  4500 non-null   int64  
+##  28  debit_cash_statement_charge_txn_ct             4500 non-null   int64  
+##  29  debit_cash_statement_charge_txn_tot            4500 non-null   int64  
+##  30  debit_cash_statement_charge_avg_txn            4500 non-null   int64  
+##  31  debit_cash_other_txn_ct                        4500 non-null   int64  
+##  32  debit_cash_other_txn_tot                       4500 non-null   int64  
+##  33  debit_cash_other_avg_txn                       4500 non-null   float64
+##  34  debit_bank_transfer_loan_payment_txn_ct        4500 non-null   int64  
+##  35  debit_bank_transfer_loan_payment_txn_tot       4500 non-null   int64  
+##  36  debit_bank_transfer_loan_payment_avg_txn       4500 non-null   float64
+##  37  debit_bank_transfer_insurance_payment_txn_ct   4500 non-null   int64  
+##  38  debit_bank_transfer_insurance_payment_txn_tot  4500 non-null   int64  
+##  39  debit_bank_transfer_insurance_payment_avg_txn  4500 non-null   int64  
+##  40  debit_bank_transfer_other_txn_ct               4500 non-null   int64  
+##  41  debit_bank_transfer_other_txn_tot              4500 non-null   int64  
+##  42  debit_bank_transfer_other_avg_txn              4500 non-null   float64
+##  43  credit_bank_transfer_pension_benefit_txn_ct    4500 non-null   int64  
+##  44  credit_bank_transfer_pension_benefit_txn_tot   4500 non-null   int64  
+##  45  credit_bank_transfer_pension_benefit_avg_txn   4500 non-null   int64  
+##  46  debit_credit_card_other_txn_ct                 4500 non-null   int64  
+##  47  debit_credit_card_other_txn_tot                4500 non-null   int64  
+##  48  debit_credit_card_other_avg_txn                4500 non-null   float64
+##  49  debit_cash_household_payment_txn_ct            4500 non-null   int64  
+##  50  debit_cash_household_payment_txn_tot           4500 non-null   int64  
+##  51  debit_cash_household_payment_avg_txn           4500 non-null   float64
+##  52  debit_cash_negative_balance_charge_txn_ct      4500 non-null   int64  
+##  53  debit_cash_negative_balance_charge_txn_tot     4500 non-null   int64  
+##  54  debit_cash_negative_balance_charge_avg_txn     4500 non-null   float64
+##  55  debit_cash_insurance_payment_txn_ct            4500 non-null   int64  
+##  56  debit_cash_insurance_payment_txn_tot           4500 non-null   int64  
+##  57  debit_cash_insurance_payment_avg_txn           4500 non-null   float64
+##  58  pmt_order_ct                                   3758 non-null   float64
+##  59  pmt_order_avg_amt                              3758 non-null   float64
+##  60  owner_client_id                                4091 non-null   float64
+##  61  gender                                         4091 non-null   object 
+##  62  birth_date                                     4091 non-null   object 
+##  63  owner_district                                 4091 non-null   object 
+## dtypes: float64(17), int64(38), object(9)
+## memory usage: 2.2+ MB</code></pre>
+</div>
+</div>
+<div id="question-1a" class="section level2">
+<h2>Question 1A:</h2>
+<div id="whether-an-account-has-a-credit-card-or-not" class="section level3">
+<h3>Whether an account has a credit card or not</h3>
+<pre class="python"><code># filter the dataset 
+
+accounts[&#39;credit_cards&#39;] = accounts[&#39;credit_cards&#39;].fillna(&#39;Unknow&#39;)
+
+sns.set_theme(style=&#39;darkgrid&#39;)
+
+ax = sns.countplot(x=&quot;credit_cards&quot;, data=accounts)
+
+ax.set_xticklabels([&#39;One Credit Card&#39;,&#39;Two Credit Cards&#39;,&#39;Unknown&#39;])</code></pre>
+<pre><code>## [Text(0, 0, &#39;One Credit Card&#39;), Text(1, 0, &#39;Two Credit Cards&#39;), Text(2, 0, &#39;Unknown&#39;)]</code></pre>
+<pre class="python"><code>ax.set_title(&#39;The countplot of credit_cards&#39;)
+ax.set_xlabel(&#39;Number of credit cards&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="most-accounts-do-not-have-credit-card-information-and-second-highest-is-one-credit-card-account" class="section level3">
+<h3>most accounts do not have credit card information, and second highest is one credit card account</h3>
+</div>
+</div>
+<div id="question-1b" class="section level2">
+<h2>Question 1B:</h2>
+<div id="whether-an-account-has-a-loan-or-not" class="section level3">
+<h3>Whether an account has a loan or not</h3>
+<pre class="python"><code>accounts.loan_status = accounts.loan_status.fillna(&#39;Unknown&#39;)
+
+sns.set_theme(style=&#39;darkgrid&#39;)
+
+ax = sns.countplot(x=&quot;loan_status&quot;, data=accounts)
+
+ax.set_title(&#39;The countplot of loan_status&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>same as the last plot, most accounts do not have loan status information, and second highest is current loan.</p>
+</div>
+</div>
+<div id="question-1c" class="section level2">
+<h2>Question 1C:</h2>
+<div id="the-average-balance-for-the-account" class="section level3">
+<h3>The average balance for the account</h3>
+<pre class="python"><code>accounts[&#39;mean_balance&#39;] = (accounts[&#39;max_balance&#39;] + accounts[&#39;min_balance&#39;]) / 2
+
+f, axes = plt.subplots(1, 2)
+
+sns.boxplot(x=&#39;mean_balance&#39;,data=accounts,ax=axes[0])
+axes[0].title.set_text(&#39;The Boxplot of Mean Balance&#39;)
+sns.distplot(x=accounts.mean_balance,ax=axes[1])
+axes[1].title.set_text(&#39;The KDE plot of Mean Balance&#39;)
+axes[1].set_xticklabels(labels=&#39;mean balance&#39;)</code></pre>
+<pre><code>## [Text(-50000.0, 0, &#39;m&#39;), Text(0.0, 0, &#39;e&#39;), Text(50000.0, 0, &#39;a&#39;), Text(100000.0, 0, &#39;n&#39;), Text(150000.0, 0, &#39; &#39;)]
+## 
+## /Users/xuguiming/Library/r-miniconda/envs/r-reticulate/bin/python:1: UserWarning: FixedFormatter should only be used together with FixedLocator</code></pre>
+<pre class="python"><code>plt.tight_layout()
+plt.show()</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="we-can-find-most-mean_balance-is-around-25000." class="section level3">
+<h3>we can find most mean_balance is around $25000.</h3>
+</div>
+</div>
+<div id="question-1d-1" class="section level2">
+<h2>Question 1D:</h2>
+<div id="to-combine-these-three-questions-together" class="section level3">
+<h3>to combine these three questions together</h3>
+<pre class="python"><code>
+# to make the boxplot and facetgrid under different number of credit_cards and loan_status
+ax = sns.boxplot(x=&quot;loan_status&quot;, y=&quot;mean_balance&quot;, hue=&quot;credit_cards&quot;,
+                 data=accounts, palette=&quot;Set3&quot;)
+ax.legend(loc=&#39;center right&#39;, bbox_to_anchor=(1.25, 0.5), ncol=1)
+ax.set_title(&#39;The Boxplot of mean balance in loan_status and number of credit cards&#39;)</code></pre>
+<p><img src="ANLY503_Q1_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
